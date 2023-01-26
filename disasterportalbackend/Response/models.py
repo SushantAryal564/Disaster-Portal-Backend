@@ -8,8 +8,14 @@ class ActivityLog(models.Model):
   deployed_inventory = models.IntegerField()
   time_of_action = models.DateTimeField(auto_now_add=True)
   disaster = models.ForeignKey(DisasterEvent, on_delete=models.CASCADE)
+  logCreator = models.CharField(max_length=255)
   def __str__(self):
-        return self.action_name
+    return self.action_name
+  def save(self, *args, **kwargs):
+    request = kwargs.pop('request', None)
+    if request:
+        self.name = f'{request.user.username}_team'
+    super().save(*args, **kwargs)
 
 @receiver(post_save, sender=DisasterEvent)
 def create_activity_log(sender, instance, created, **kwargs):
