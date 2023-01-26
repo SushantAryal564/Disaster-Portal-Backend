@@ -20,7 +20,7 @@ class WardResponseTeamsSerializer(serializers.ModelSerializer):
         model = WardResponseTeams
         fields = '__all__'
 
-class WardResponseTeamMemberSerializer(serializers.ModelSerializer):
+class WardResponseTeamMembersSerializer(serializers.ModelSerializer):
     class Meta:
         model = WardResponseTeamMembers
         fields = '__all__'

@@ -1,5 +1,5 @@
 from .models import *
-
+from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin
 from django.contrib.auth.forms import UserCreationForm, UserChangeForm
 
@@ -37,3 +37,4 @@ class CustomUserAdmin(UserAdmin):
         ('Important dates', {'fields': ('last_login', 'date_joined')}),
     )
     list_filter = ('is_staff', 'is_active', 'is_superuser', 'is_Municipality', 'is_Ward', 'is_cluster')
+admin.site.register(CustomUser, CustomUserAdmin)
