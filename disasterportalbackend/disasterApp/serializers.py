@@ -6,8 +6,18 @@ class ClusterTypeSerializer(serializers.ModelSerializer):
     model = ClusterType
     fields = '__all__'
 
-class ClusterTypeSerializer(serializers.ModelSerializer):
+class RatingSerializer(serializers.ModelSerializer):
   class Meta:
-    model = ClusterType
+    model = Rating
     fields = '__all__'
     
+class DisasterTypeSerializer(serializers.ModelSerializer):
+  class Meta:
+    model = DisasterType
+    fields = '__all__'
+
+class DisasterEventSerializer(serializers.ModelSerializer):
+  class Meta:
+    model = DisasterEvent
+    fields = '__all__'
+
