@@ -6,10 +6,10 @@ class DisasterType(models.Model):
     title = models.CharField(max_length=100)
     icon = models.CharField(max_length=100)
     type = models.CharField(max_length=100)
-    order = models.IntegerField(max=5, min=1)
+    order = models.IntegerField()
 
 class Rating(models.Model):
-    order = models.IntegerField(max=5, min=1)
+    order = models.IntegerField()
 
 class ClusterType(models.Model):
     name = models.CharField(max_length=100)
@@ -28,7 +28,7 @@ class DisasterEvent(models.Model):
     is_verified = models.BooleanField(null=False, blank=False)
     is_closed = models.BooleanField(null=False,blank=False)
     type = models.ForeignKey(DisasterType,on_delete=models.PROTECT, blank=False, null=False )
-    rating = models.ForeignKey(Rating, null=False, blank=False)
+    rating = models.ForeignKey(Rating,on_delete=models.PROTECT, null=False, blank=False)
     source = models.CharField(max_length=100)
     description = models.TextField()
     startTime = models.DateTimeField()

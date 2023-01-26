@@ -28,12 +28,14 @@ class Volunters(models.Model):
 
 class MunicipalPolice(models.Model):
   name=models.CharField(max_length=100)
+  contact = models.CharField(max_length=100)
     
 #response Team for Ward iniciatives    
 class WardResponseTeams(models.Model):
   name=models.CharField(max_length=100)
   disaster=models.ForeignKey(DisasterEvent,on_delete=models.CASCADE)
   deployed=models.BooleanField(default=False)
+  team_leader = models.CharField(max_length=100)
 
 class WardResponseTeamMembers(models.Model):
   volunters=models.ForeignKey(Volunters,on_delete=models.CASCADE,blank=True,null=True)

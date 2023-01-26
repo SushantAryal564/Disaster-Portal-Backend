@@ -15,9 +15,9 @@ from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
 from django.contrib.auth.validators import UnicodeUsernameValidator
 from disasterApp.models import *
+from adminboundary.models import *
 class CustomUserManager(BaseUserManager):
     use_in_migrations = True
-
     def _create_user(self, username, email, password, **extra_fields):
         if not username:
             raise ValueError("The given username must be set")
@@ -79,12 +79,12 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
     )
     date_joined = models.DateTimeField(_("date joined"), default=timezone.now)
     updated_at = models.DateTimeField(auto_now=True)
-    is_CDO = models.BooleanField(default=False)
     is_Municipality = models.BooleanField(default=False)
     is_Ward = models.BooleanField(default=False)
     is_cluster = models.BooleanField(default=False)
     cluster_type = models.ForeignKey(ClusterType, on_delete=models.CASCADE, null=True, blank=True)
     ward = models.ForeignKey(Ward, on_delete=models.CASCADE, null=True, blank=True)
+    municipality = models.ForeignKey(LalitpurMetro, on_delete=models.CASCADE, null=True, blank=True)
     
     objects = CustomUserManager()
 
