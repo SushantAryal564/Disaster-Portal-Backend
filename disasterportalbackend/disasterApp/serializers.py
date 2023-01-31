@@ -16,8 +16,9 @@ class DisasterTypeSerializer(serializers.ModelSerializer):
     model = DisasterType
     fields = '__all__'
 
+
 class DisasterEventSerializer(serializers.ModelSerializer):
   class Meta:
     model = DisasterEvent
-    fields = '__all__'
+    exclude = ['geom', 'is_verified','is_closed']
 

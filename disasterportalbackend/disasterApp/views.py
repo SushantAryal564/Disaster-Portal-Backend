@@ -1,4 +1,5 @@
 from rest_framework import viewsets
+from django.contrib.gis.geos import GEOSGeometry
 
 from .models import *
 from .serializers import *
@@ -23,11 +24,14 @@ class DisasterEventViewSet(viewsets.ModelViewSet):
   permission_classes = [DisasterEventPermission,]
   serializer_class = DisasterEventSerializer
   def perform_create(self, serializer):
+    source = "unknown"
     if self.request.user.is_authenticated:
       if(self.request.user.username):
         source = self.request.user.username;
-      else:
-        source = "unknown"
-      serializer.save(is_verified=True,source=source)
+    lat = self.request.data['lat']
+    lng = self.request.data['long']
+    pntString = "POINT"+"("+lng+" "+lat+")"
+    pnt = GEOSGeometry(pntString)
+    serializer.save(is_verified=True,source=source,geom = pnt)
 
 

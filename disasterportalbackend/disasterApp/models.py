@@ -1,6 +1,7 @@
 from django.db import models
 from django.utils import timezone
 from adminboundary.models import *
+from django.db.models import Manager as GeoManager
 
 class DisasterType(models.Model):
     title = models.CharField(max_length=100)
@@ -19,6 +20,8 @@ class ClusterType(models.Model):
 class DisasterEvent(models.Model):
     name=models.CharField(max_length=100)
     Ward=models.ForeignKey(Ward,on_delete=models.PROTECT,blank=True,null=True)
+    lat = models.FloatField(blank=True, null=True)
+    long = models.FloatField(blank = True, null=True)
     geom=models.GeometryField(blank=True,null=True)
     date_event= models.DateTimeField(blank=True,default=timezone.now,null=True)
     date_closed=models.DateTimeField(blank=True,null=True)
@@ -32,8 +35,10 @@ class DisasterEvent(models.Model):
     description = models.TextField(blank=True, null=True)
     startTime = models.DateTimeField(blank=True, null=True)
     expireTime = models.DateTimeField(blank=True, null=True)
-    
+    objects=GeoManager()
     
     def __str__(self):
         return str(super().__str__())+str(self.name)
+    
+    # def save(self,)
 
