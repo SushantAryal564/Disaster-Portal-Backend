@@ -1,6 +1,8 @@
 from rest_framework import viewsets
 from django.contrib.gis.geos import GEOSGeometry
-
+from django_filters import rest_framework as filters
+from rest_framework  import filters as rest_filters
+# from .filter import *
 from .models import *
 from .serializers import *
 from .permission import *
@@ -23,6 +25,10 @@ class DisasterEventViewSet(viewsets.ModelViewSet):
   queryset = DisasterEvent.objects.all()
   permission_classes = [DisasterEventPermission,]
   serializer_class = DisasterEventSerializer
+  filter_backends=[filters.DjangoFilterBackend,rest_filters.SearchFilter,rest_filters.OrderingFilter]
+  filterset_fields = ['name','Ward']
+  search_fields = ['name','Ward']
+  
   def perform_create(self, serializer):
     source = "unknown"
     if self.request.user.is_authenticated:

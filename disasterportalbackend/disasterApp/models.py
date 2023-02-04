@@ -5,9 +5,9 @@ from django.db.models import Manager as GeoManager
 
 class DisasterType(models.Model):
     title = models.CharField(max_length=100)
-    icon = models.CharField(max_length=100)
+    icon = models.CharField(max_length=100, blank=True, null=True);
     type = models.CharField(max_length=100)
-    order = models.IntegerField()
+    order = models.IntegerField(blank = True, null =True);
 
 class Rating(models.Model):
     order = models.IntegerField()
