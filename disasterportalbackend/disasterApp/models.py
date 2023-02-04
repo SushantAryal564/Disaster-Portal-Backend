@@ -2,7 +2,8 @@ from django.db import models
 from django.utils import timezone
 from adminboundary.models import *
 from django.db.models import Manager as GeoManager
-
+from django.dispatch import receiver
+from django.db.models.signals import post_save,post_delete
 class DisasterType(models.Model):
     title = models.CharField(max_length=100)
     icon = models.FileField(null=True, blank =True)
@@ -42,9 +43,16 @@ class DisasterEvent(models.Model):
     startTime = models.DateTimeField(blank=True, null=True)
     expireTime = models.DateTimeField(blank=True, null=True)
     objects=GeoManager()
-    
+    def save(self, *args, **kwargs):
+        self.Ward.number_of_disasters += 1
+        self.Ward.save()
+        super().save(*args, **kwargs)
+        
     def __str__(self):
         return str(super().__str__())+str(self.name)
-    
-    # def save(self,)
+
+@receiver(post_delete, sender=DisasterEvent)
+def decrement_ward_disasters(sender, instance, **kwargs):
+    instance.Ward.number_of_disasters -= 1
+    instance.Ward.save()    
 
