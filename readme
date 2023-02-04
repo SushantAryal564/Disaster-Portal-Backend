@@ -1,0 +1,10 @@
+# Handling Image in django
+  1. Create a field of type ImageField
+  2. pip install pillow
+  3. In setting.py file add:
+     STATIC_URL = 'static/'
+     MEDIA_URL = '/images/'
+     STATICFILES_DIRS = [
+         BASE_DIR / 'static'
+     ]
+     MEDIA_ROOT = 'static/images'

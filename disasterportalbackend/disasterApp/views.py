@@ -26,8 +26,8 @@ class DisasterEventViewSet(viewsets.ModelViewSet):
   permission_classes = [DisasterEventPermission,]
   serializer_class = DisasterEventSerializer
   filter_backends=[filters.DjangoFilterBackend,rest_filters.SearchFilter,rest_filters.OrderingFilter]
-  filterset_fields = ['name','Ward']
-  search_fields = ['name','Ward']
+  filterset_fields = ['name','Ward','type','is_closed']
+  search_fields = ['name','Ward','type','is_closed']
   
   def perform_create(self, serializer):
     source = "unknown"

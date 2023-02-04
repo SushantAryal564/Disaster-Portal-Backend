@@ -5,17 +5,23 @@ from django.db.models import Manager as GeoManager
 
 class DisasterType(models.Model):
     title = models.CharField(max_length=100)
-    icon = models.CharField(max_length=100, blank=True, null=True);
+    icon = models.FileField(null=True, blank =True)
     type = models.CharField(max_length=100)
     order = models.IntegerField(blank = True, null =True);
+    def __str__(self):
+        return str(self.title)
 
 class Rating(models.Model):
     order = models.IntegerField()
+    def __str__(self):
+        return str(self.order)
 
 class ClusterType(models.Model):
     name = models.CharField(max_length=100)
     cluster_lead = models.CharField(max_length=100)
     cluster_lead = models.CharField(max_length=100)
+    def __str__(self):
+        return str(self.name)
 
 class DisasterEvent(models.Model):
     name=models.CharField(max_length=100)
