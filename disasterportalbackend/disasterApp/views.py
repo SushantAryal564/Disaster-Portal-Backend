@@ -2,6 +2,7 @@ from rest_framework import viewsets
 from django.contrib.gis.geos import GEOSGeometry
 from django_filters import rest_framework as filters
 from rest_framework  import filters as rest_filters
+from .disasterFilter import *
 # from .filter import *
 from .models import *
 from .serializers import *
@@ -26,8 +27,9 @@ class DisasterEventViewSet(viewsets.ModelViewSet):
   permission_classes = [DisasterEventPermission,]
   serializer_class = DisasterEventSerializer
   filter_backends=[filters.DjangoFilterBackend,rest_filters.SearchFilter,rest_filters.OrderingFilter]
-  filterset_fields = ['name','Ward','type','is_closed']
-  search_fields = ['name','Ward','type','is_closed']
+  filter_class = DisasterTimeFilter
+  filterset_fields = ['name','Ward','type','is_closed','startTime','expireTime']
+  search_fields = ['name','Ward','type','is_closed','startTime','expireTime']
   
   def perform_create(self, serializer):
     source = "unknown"
@@ -40,4 +42,11 @@ class DisasterEventViewSet(viewsets.ModelViewSet):
     pnt = GEOSGeometry(pntString)
     serializer.save(is_verified=True,source=source,geom = pnt)
 
-
+class DisasterEventWithoutGeomViewSet(viewsets.ModelViewSet):
+  queryset = DisasterEvent.objects.all()
+  permission_classes = [DisasterEventPermission,]
+  serializer_class = DisasterEventWitoutWardGeomSerializer
+  filter_backends=[filters.DjangoFilterBackend,rest_filters.SearchFilter,rest_filters.OrderingFilter]
+  filter_class = DisasterTimeFilter
+  filterset_fields = ['name','Ward','type','is_closed','startTime','expireTime']
+  search_fields = ['name','Ward','type','is_closed','startTime','expireTime']

@@ -1,4 +1,5 @@
-from rest_framework_gis.serializers import GeoFeatureModelSerializer
+from rest_framework_gis.serializers import GeoFeatureModelSerializer;
+from rest_framework import serializers
 from .models import *;
 class LalitpurMetroSerializer(GeoFeatureModelSerializer):
     class Meta:
@@ -11,3 +12,8 @@ class WardSerializer(GeoFeatureModelSerializer):
         model = Ward
         geo_field = "geom"
         fields = '__all__'
+
+class WardWithoutGeomSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Ward
+        exclude = ['geom',];
