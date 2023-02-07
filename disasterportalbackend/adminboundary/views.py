@@ -4,7 +4,7 @@ from .serializer import *
 class LalitpurMetroViewSet(viewsets.ModelViewSet):
     queryset = LalitpurMetro.objects.all()
     serializer_class = LalitpurMetroSerializer
-class WardViewSet(viewsets.ModelViewSet):
+class WardWithGeomViewSet(viewsets.ModelViewSet):
     queryset = Ward.objects.all()
     serializer_class = WardSerializer
 class WardViewSet(viewsets.ModelViewSet):

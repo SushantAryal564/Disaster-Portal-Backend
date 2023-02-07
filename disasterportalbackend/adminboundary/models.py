@@ -9,7 +9,8 @@ class Ward(models.Model):
     ward = models.BigIntegerField()
     geom = models.PolygonField(srid=4326)
     number_of_disasters = models.IntegerField(default=0)
-    total_number_of_disasters = models.IntegerField(default=0)
+    total_infrastructure_damaged = models.IntegerField(default=0)
+    total_estimated_loss = models.IntegerField(default=0)
     def __str__(self):
         return str(self.ward)
 
