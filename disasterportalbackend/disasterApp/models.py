@@ -45,6 +45,7 @@ class DisasterEvent(models.Model):
     peopleDeath = models.IntegerField(blank=True, null=True)
     estimatedLoss = models.IntegerField(blank=True, null=True)
     InfrastructureDestroyed = models.IntegerField(blank=True, null=True)
+    peopleDeath = models.IntegerField(blank=True, null=True)
     objects=GeoManager()
     def save(self, *args, **kwargs):
         self.Ward.number_of_disasters += 1
@@ -63,10 +64,12 @@ def decrement_ward_disasters(sender, instance, **kwargs):
 def update_ward_disater_damge_loss(sender, instance, **kwargs):
     instance.Ward.total_infrastructure_damaged += instance.InfrastructureDestroyed
     instance.Ward.total_estimated_loss += instance.estimatedLoss
+    instance.Ward.total_people_death += instance.peopleDeath
     instance.Ward.save()
 
 @receiver(post_delete, sender=DisasterEvent)
 def subtract_ward_disater_damge_loss(sender, instance, **kwargs):
     instance.Ward.total_infrastructure_damaged -= instance.InfrastructureDestroyed
     instance.Ward.total_estimated_loss -= instance.estimatedLoss
+    instance.Ward.total_people_death -= instance.peopleDeath
     instance.Ward.save()

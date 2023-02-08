@@ -11,6 +11,7 @@ class Ward(models.Model):
     number_of_disasters = models.IntegerField(default=0)
     total_infrastructure_damaged = models.IntegerField(default=0)
     total_estimated_loss = models.IntegerField(default=0)
+    total_people_death = models.IntegerField(default=0)
     def __str__(self):
         return str(self.ward)
 
