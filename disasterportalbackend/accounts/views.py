@@ -16,10 +16,25 @@ class LoginAPI(APIView):
         user = authenticate(username = username, password=password)
         if user is None:
           return Response({'message':'invalid password'})
-      refresh = RefreshToken.for_user(user)
-      return Response({
-        'refresh': str(refresh),
-        'access': str(refresh.access_token),
-      })
+        usertype = ""
+        refresh = RefreshToken.for_user(user)
+        if(user.ward):
+          wardNumber = user.ward.ward
+          usertype = "ward"
+          return Response({
+          'refresh': str(refresh),
+          'user':usertype,
+          'userId': user.ward.id,
+          'WardNumber':wardNumber,
+          'access': str(refresh.access_token),
+        })
+        if(user.municipality):
+          usertype = "munciplaity"
+          return Response({
+          'refresh': str(refresh),
+          'user':usertype,
+          'access': str(refresh.access_token),
+        })
+
     except Exception as e:
       print(e)
