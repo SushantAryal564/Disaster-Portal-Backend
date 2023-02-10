@@ -25,6 +25,7 @@ INSTALLED_APPS = [
     'adminboundary',
     'disasterApp',
     'Response',
+    'util'
 ]
 
 MIDDLEWARE = [
