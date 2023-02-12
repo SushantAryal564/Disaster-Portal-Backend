@@ -7,8 +7,6 @@ class LoginAPI(APIView):
   def post(self, request):
     try:
       data= request.data
-      print("******************")
-      print(data);
       serializer = LoginSerializer(data = data)
       if serializer.is_valid():
         username = serializer.data['username']

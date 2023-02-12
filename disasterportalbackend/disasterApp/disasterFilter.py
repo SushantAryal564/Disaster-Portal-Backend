@@ -1,10 +1,10 @@
-import django_filters
-from .models import *
+# from django_filters import filters
+# from .models import *
 
-class DisasterTimeFilter(django_filters.FilterSet):
-    start_time = django_filters.DateTimeFilter(field_name='timestamp', lookup_expr='gte')
-    end_time = django_filters.DateTimeFilter(field_name='timestamp', lookup_expr='lte')
+# class DisasterTimeFilter(django_filters.FilterSet):
+#     start_time_after = filters.DateTimeFilter(field_name='start_time', lookup_expr='gte')
+#     end_time = filters.DateTimeFilter(field_name='expireTime', lookup_expr='lte')
 
-    class Meta:
-        model = DisasterEvent
-        fields = ['startTime', 'expireTime']
+#     class Meta:
+#         model = DisasterEvent
+#         fields = ['start_time', 'end_time']
