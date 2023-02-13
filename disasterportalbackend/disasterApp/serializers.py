@@ -19,10 +19,11 @@ class DisasterTypeSerializer(serializers.ModelSerializer):
 
 class DisasterEventSerializer(serializers.ModelSerializer):
   type = DisasterTypeSerializer()
+  
   class Meta:
     model = DisasterEvent
     exclude = ['geom', 'is_verified','is_closed']
-# DisasterEvent with ward without geom field imported from WardWithoutGeomSerializer of admin boundary serializer.
+
 class DisasterEventWitoutWardGeomSerializer(serializers.ModelSerializer):
   type = DisasterTypeSerializer()
   Ward = WardWithoutGeomSerializer()

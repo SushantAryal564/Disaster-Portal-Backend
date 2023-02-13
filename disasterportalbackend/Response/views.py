@@ -1,18 +1,24 @@
 from rest_framework import viewsets
 from .models import *
 from .serializers import *
-from rest_framework.response import Response
-from rest_framework.views import APIView
+from django_filters import rest_framework as filters
+from rest_framework  import filters as rest_filters
 from .permission import *
 
 class ActivityLogViewSet(viewsets.ModelViewSet):
     queryset = ActivityLog.objects.all()
     serializer_class = ActivityLogSerializer
     permission_classes = [ActivityLogPermission,]
+    filter_backends=[filters.DjangoFilterBackend,rest_filters.SearchFilter,rest_filters.OrderingFilter]
+    filterset_fields = {
+    'disaster__is_closed':['exact'],
+    'disaster__id':['exact'],
+    }
+    search_fields = ['disaster__is_closed', 'disaster__id']
     def perform_create(self, serializer):
-      if self.request.user.is_authenticated:
+     if self.request.user.is_authenticated:
         serializer.save(logCreator=self.request.user)
-
+    
 class VoluntersViewSet(viewsets.ModelViewSet):
     queryset = Volunters.objects.all()
     permission_classes = [OnlyGet,]

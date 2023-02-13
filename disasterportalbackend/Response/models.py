@@ -3,6 +3,7 @@ from django.db.models.signals import post_save
 from django.dispatch import receiver
 from disasterApp.models import *
 from disasterApp.models import *
+
 class ActivityLog(models.Model):
   action_name = models.CharField(max_length=255)
   deployed_inventory = models.IntegerField()
@@ -11,7 +12,6 @@ class ActivityLog(models.Model):
   logCreator = models.CharField(max_length=255, blank=True, null=True)
   def __str__(self):
     return self.action_name
-
 
 @receiver(post_save, sender=DisasterEvent)
 def create_activity_log(sender, instance, created, **kwargs):
@@ -22,6 +22,8 @@ def create_activity_log(sender, instance, created, **kwargs):
           time_of_action=timezone.now(), 
           disaster=instance
       )
+
+
 class Volunters(models.Model):
   name=models.CharField(max_length=100)
   contact=models.CharField(max_length=100)

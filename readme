@@ -17,3 +17,10 @@ py manage.py dumpdata disasterApp.DisasterType > disastertype.json
 py manage.py dumpdata disasterApp.Rating > Rating.json
 py manage.py dumpdata disasterApp.ClusterType > clustertype.json
 py manage.py dumpdata disasterApp.DisasterEvent > disasterevent.json
+
+OGR INSPECT
+python manage.py ogrinspect shp/Road/road_lalitpur.shp RoadModal --srid=4326 --mapping --multi
+from django.contrib.gis.utils import LayerMapping
+from LalitpurData.models import RoadModal
+lm = LayerMapping(RoadModal, 'shp/Road/road_lalitpur.shp', roadmodal_mapping)
+lm.save(verbose=True)
