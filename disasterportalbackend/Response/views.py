@@ -13,6 +13,7 @@ class ActivityLogViewSet(viewsets.ModelViewSet):
     filterset_fields = {
     'disaster__is_closed':['exact'],
     'disaster__id':['exact'],
+    'disaster__Ward':['exact'],
     }
     search_fields = ['disaster__is_closed', 'disaster__id']
     def perform_create(self, serializer):

@@ -25,6 +25,7 @@ INSTALLED_APPS = [
     'adminboundary',
     'disasterApp',
     'Response',
+    'LalitpurLandCover',
 ]
 
 MIDDLEWARE = [
