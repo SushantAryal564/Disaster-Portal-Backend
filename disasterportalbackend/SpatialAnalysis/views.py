@@ -15,39 +15,37 @@ from django.db import connection
 class BufferPolygonIntersectionView(APIView):
     def get(self, request):
         print('gettin buildings.... wait')
+        print("********************")
         lat = float(request.GET.get('lat'))
-        lng = float(request.GET.get('lng'))
+        lng = float(request.GET.get('lon'))
         buffer_distance = float(request.GET.get('buffer_distance'))
         p4326=Point(lng, lat, srid=4326)
         print('lat long sent',lng,lat)
         print('lat long got',p4326)
         ct = CoordTransform(SpatialReference(4326), SpatialReference(3857))
         p3857 = p4326.transform(ct, clone=True)
-        buffer_polygon_3857 = p3857.buffer(buffer_distance/100000)
-        buffer_polygon_4326 = p4326.buffer(buffer_distance/100000)
+        # buffer_polygon_3857 = p3857.buffer(buffer_distance/100000)
+        # buffer_polygon_4326 = p4326.buffer(buffer_distance/100000)
         
         print('Point transformned---->>>>>>',p4326) 
         query = """
-  SELECT *
-FROM Buildings
+  SELECT * FROM "Buildings"
 WHERE ST_Intersects(
-  way,
+  geom,
   ST_Transform(
     ST_MakeEnvelope(85.28460208092133, 27.606122394532917, 85.35535620512481, 27.69326664414035, 4326),
-    3857
+    4326
   )
-) AND
-  admin_level IS NULL AND
-  building = 'yes' AND
+)  AND
   ST_DWithin(
     ST_Transform(
       ST_SetSRID(
         ST_Point(%s, %s),
         4326
       ),
-      3857
+      4326
     ),
-    ST_Transform(way, 3857),
+    ST_Transform(geom, 4326),
     %s
   )
 LIMIT 10000;
@@ -64,25 +62,27 @@ LIMIT 10000;
 
         buildings = [] 
         for row in rows:
-            way_wkb = row[-1]
+            way_wkb = row[1]
             osm_id=row[0]
-            amenities=row[8]
+            classes=row[4]
+            name = row[5]
+            type = row[6]            
             way_geometry = GEOSGeometry(way_wkb) 
-            way_geometryt= way_geometry.transform(4326, clone=True)
-            buildings.append([way_geometryt,osm_id,amenities])
+            buildings.append([way_geometry,osm_id,classes,name,type])
                 
-                
-        
         features = []
         for building in buildings:
           
             geos_polygon = building[0]
             osm_id=building[1]
-          
+            classes = building[2]
+            name = building[3]
+            type = building[4]
+            
             feature = {
                 "type": "Feature",
                 "geometry":json.loads(geos_polygon.geojson),
-                "properties": {"osm_id":osm_id,"amenities":building[2]}
+                "properties": {"osm_id":osm_id,"classes":building[2],"name":building[3],"type":building[4]}
             }
             features.append(feature)
         

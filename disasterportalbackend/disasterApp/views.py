@@ -2,6 +2,7 @@ from rest_framework import viewsets
 from django.contrib.gis.geos import GEOSGeometry
 from django_filters import rest_framework as filters
 from rest_framework  import filters as rest_filters
+from rest_framework_simplejwt.authentication import JWTAuthentication
 # from .disasterFilter import *
 # from .filter import *
 from .models import *
@@ -25,6 +26,7 @@ class DisasterTypeViewSet(viewsets.ModelViewSet):
 class DisasterEventViewSet(viewsets.ModelViewSet):
   queryset = DisasterEvent.objects.all()
   permission_classes = [DisasterEventPermission,]
+  authentication_classes = [JWTAuthentication]
   serializer_class = DisasterEventSerializer
   filter_backends=[filters.DjangoFilterBackend,rest_filters.SearchFilter,rest_filters.OrderingFilter]
   # filterset_class = DisasterTimeFilter
@@ -52,6 +54,7 @@ class DisasterEventViewSet(viewsets.ModelViewSet):
 class DisasterEventWithoutGeomViewSet(viewsets.ModelViewSet):
   queryset = DisasterEvent.objects.all()
   permission_classes = [DisasterEventPermission,]
+  authentication_classes = [JWTAuthentication]
   serializer_class = DisasterEventWitoutWardGeomSerializer
   filter_backends=[filters.DjangoFilterBackend,rest_filters.SearchFilter,rest_filters.OrderingFilter]
   # filterset_class = DisasterTimeFilter

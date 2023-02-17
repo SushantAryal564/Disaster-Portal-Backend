@@ -3,7 +3,6 @@ from .models import *
 from disasterApp.serializers import *;
 
 class ActivityLogSerializer(serializers.ModelSerializer):
-    disaster = DisasterEventSerializer()
     class Meta:
         model = ActivityLog
         fields = '__all__'

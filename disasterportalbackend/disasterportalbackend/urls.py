@@ -13,8 +13,7 @@ urlpatterns = [
     path('api/v1/spatial/',include('adminboundary.urls')),
     path('api/token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
     path('api/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
-
     path('api/v1/',include("accounts.urls")),
-    path('api/v1/analysis',include("SpatialAnalysis.urls"))
+    path('api/v1/analysis/',include("SpatialAnalysis.urls"))
 ]
 urlpatterns += static(settings.MEDIA_URL,document_root=settings.MEDIA_ROOT);

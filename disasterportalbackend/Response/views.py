@@ -4,11 +4,13 @@ from .serializers import *
 from django_filters import rest_framework as filters
 from rest_framework  import filters as rest_filters
 from .permission import *
+from rest_framework_simplejwt.authentication import JWTAuthentication
 
 class ActivityLogViewSet(viewsets.ModelViewSet):
     queryset = ActivityLog.objects.all()
     serializer_class = ActivityLogSerializer
     permission_classes = [ActivityLogPermission,]
+    authentication_classes = [JWTAuthentication]
     filter_backends=[filters.DjangoFilterBackend,rest_filters.SearchFilter,rest_filters.OrderingFilter]
     filterset_fields = {
     'disaster__is_closed':['exact'],
