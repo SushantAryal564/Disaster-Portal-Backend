@@ -4,6 +4,9 @@ from django.urls import path,include
 from SpatialAnalysis.views import *
 
 urlpatterns = [
-    path("building/", BufferPolygonIntersectionView.as_view()),
-    path('buffer/',BufferPolygonView.as_view())
+    path("building/", BufferPolygonIntersectionViewBuilding.as_view()),
+    path("forest/",BufferPolygonIntersectionViewForest.as_view()),
+    path("waterbody/",BufferPolygonIntersectionViewWaterBody.as_view()),
+    path("amenities/",BufferPolygonIntersectionViewAmenities.as_view()),
+
 ]

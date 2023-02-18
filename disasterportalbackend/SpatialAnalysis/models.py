@@ -2,7 +2,7 @@ from django.contrib.gis.db import models
 
 
 class Amenities(models.Model):
-    geom = models.MultiPolygonField(blank=True, null=True)
+    geom = models.PolygonField(blank=True, null=True)
     osm_id = models.CharField(max_length=12, blank=True, null=True)
     code = models.IntegerField(blank=True, null=True)
     fclass = models.CharField(max_length=28, blank=True, null=True)
@@ -14,7 +14,7 @@ class Amenities(models.Model):
 
 
 class Buildings(models.Model):
-    geom = models.MultiPolygonField(blank=True, null=True)
+    geom = models.PolygonField(blank=True, null=True)
     osm_id = models.CharField(max_length=12, blank=True, null=True)
     code = models.IntegerField(blank=True, null=True)
     fclass = models.CharField(max_length=28, blank=True, null=True)
@@ -27,7 +27,7 @@ class Buildings(models.Model):
 
 
 class Forest(models.Model):
-    geom = models.MultiPolygonField(blank=True, null=True)
+    geom = models.PolygonField(blank=True, null=True)
     osm_id = models.CharField(max_length=12, blank=True, null=True)
     code = models.IntegerField(blank=True, null=True)
     fclass = models.CharField(max_length=28, blank=True, null=True)
@@ -38,7 +38,7 @@ class Forest(models.Model):
         db_table = 'Forest'
 
 class Waterbody(models.Model):
-    geom = models.MultiPolygonField(blank=True, null=True)
+    geom = models.PolygonField(blank=True, null=True)
     osm_id = models.CharField(max_length=12, blank=True, null=True)
     code = models.IntegerField(blank=True, null=True)
     fclass = models.CharField(max_length=28, blank=True, null=True)
@@ -49,7 +49,7 @@ class Waterbody(models.Model):
         db_table = 'Waterbody'
 
 class RoadLalitpur(models.Model):
-    geom = models.MultiLineStringField(blank=True, null=True)
+    geom = models.LineStringField(blank=True, null=True)
     osm_id = models.CharField(max_length=12, blank=True, null=True)
     code = models.IntegerField(blank=True, null=True)
     fclass = models.CharField(max_length=28, blank=True, null=True)
