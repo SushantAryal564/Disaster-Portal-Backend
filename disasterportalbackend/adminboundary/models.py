@@ -21,7 +21,7 @@ class Ward(models.Model):
     total_infrastructure_damaged = models.IntegerField(blank=True, null=True)
     total_estimated_loss = models.FloatField(blank=True, null=True)
     total_people_death = models.IntegerField(blank=True, null=True)
-
+    centroid = models.GeometryField(srid=0, blank=True, null=True)   
     class Meta:
         managed = False
         db_table = 'Ward'

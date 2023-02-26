@@ -1,9 +1,12 @@
 from django.contrib import admin
 from django.urls import path,include
+from rest_framework import routers
 
 from SpatialAnalysis.views import *
-
+router = routers.DefaultRouter()
+router.register(r'allbuilding', BuildingViewset)
 urlpatterns = [
+    path('', include(router.urls)),
     path("building/", BufferPolygonIntersectionViewBuilding.as_view()),
     path("forest/",BufferPolygonIntersectionViewForest.as_view()),
     path("waterbody/",BufferPolygonIntersectionViewWaterBody.as_view()),

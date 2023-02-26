@@ -22,7 +22,7 @@ class Buildings(models.Model):
     name = models.CharField(max_length=100, blank=True, null=True)
     type = models.CharField(max_length=20, blank=True, null=True)
     geom = models.MultiPolygonField(blank=True, null=True)
-
+    ward = models.IntegerField(blank=True, null=True)
     class Meta:
         managed = False
         db_table = 'Buildings'

@@ -22,7 +22,7 @@ class LoginAPI(APIView):
           return Response({
           'refresh': str(refresh),
           'user':usertype,
-          'userId': user.ward.id,
+          'userId': user.ward.gid,
           'WardNumber':wardNumber,
           'access': str(refresh.access_token),
         })
@@ -36,3 +36,4 @@ class LoginAPI(APIView):
 
     except Exception as e:
       print(e)
+      return Response({"message":"Internal Server Error"})

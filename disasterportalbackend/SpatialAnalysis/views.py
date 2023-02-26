@@ -10,8 +10,7 @@ from django.contrib.gis.geos import Point
 from django.contrib.gis.measure import Distance
 from django.contrib.gis.gdal import SpatialReference, CoordTransform
 from django.db import connection
-
-
+from rest_framework import viewsets
 
 class BufferPolygonIntersectionViewBuilding(APIView):
   def get(self, request):
@@ -350,3 +349,28 @@ class NearestWaterBody(APIView):
         waterbodies = Waterbody.objects.filter(geom__distance_lte=(location, distance))
         serializer = WaterBodySerializer(waterbodies, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
+      
+from rest_framework.pagination import PageNumberPagination
+
+class MyPaginationClass(PageNumberPagination):
+    page_size = 100 # number of items to return per page
+    page_size_query_param = 'page_size'
+    max_page_size = 1000
+    
+class BuildingViewset(viewsets.ModelViewSet):
+    queryset = Buildings.objects.all()
+    serializer_class = BuildingsSerializer
+    pagination_class = MyPaginationClass
+    def get_queryset(self):
+      queryset = super().get_queryset()
+      ward = self.request.query_params.get('ward', None)
+      if ward is not None:
+          queryset = queryset.filter(ward=ward)
+      return queryset
+
+class AmenitiesViewset(viewsets.ModelViewSet):
+    queryset = Amenities.objects.all()
+    serializer_class = AmenitiesSerializer
+
+
+  
