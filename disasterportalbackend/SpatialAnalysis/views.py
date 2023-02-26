@@ -299,16 +299,16 @@ from django.contrib.gis.db.models.functions import Distance
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
-from .models import Amenities
-from .serializers import AmenitiesSerializer
+from .models import *
+from .serializers import *
 
 class NearestAmenities(APIView):
-    def get(self, request, latitude, longitude):
+    def get(self, request, latitude, longitude, distance=30):
         # Create a point object from the given latitude and longitude
         location = Point(float(longitude), float(latitude), srid=4326)
         
-        # Query the Amenities model for the nearest amenities within 30 meters
-        nearest_amenities = Amenities.objects.filter(geom__distance_lte=(location, 30)).annotate(distance=Distance('geom', location)).order_by('distance')
+        # Query the Amenities model for the nearest amenities within the given distance
+        nearest_amenities = Amenities.objects.filter(geom__distance_lte=(location, distance)).annotate(distance=Distance('geom', location)).order_by('distance')
         
         # Serialize the nearest amenities
         serializer = AmenitiesSerializer(nearest_amenities, many=True)
@@ -317,8 +317,36 @@ class NearestAmenities(APIView):
         return Response(serializer.data, status=status.HTTP_200_OK)
 
 class NearestBuildings(APIView):
-    def get(self, request, latitude, longitude):
+    def get(self, request, latitude, longitude, distance=30):
+        # Create a point object from the given latitude and longitude
         location = Point(float(longitude), float(latitude), srid=4326)
-        nearest_buildings = Buildings.objects.filter(geom__distance_lte=(location, 30)).annotate(distance=Distance('geom', location)).order_by('distance')
-        serializer = AmenitiesSerializer(nearest_buildings, many=True)
+        
+        # Query the Buildings model for buildings within the given distance
+        buildings = Buildings.objects.filter(geom__distance_lte=(location, distance))
+        
+        # Serialize the buildings
+        serializer = BuildingsSerializer(buildings, many=True)
+        
+        # Return the serialized data as a JSON response
+        return Response(serializer.data, status=status.HTTP_200_OK)
+      
+class NearestForests(APIView):
+    def get(self, request, latitude, longitude, distance=30):
+        location = Point(float(longitude), float(latitude), srid=4326)
+        forests = Forest.objects.filter(geom__distance_lte=(location, distance))
+        serializer = ForestSerializer(forests, many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+
+class NearestRoads(APIView):
+    def get(self, request, latitude, longitude, distance=30):
+        location = Point(float(longitude), float(latitude), srid=4326)
+        roads = Road.objects.filter(geom__distance_lte=(location, distance))
+        serializer = RoadSerializer(roads, many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+
+class NearestWaterBody(APIView):
+    def get(self, request, latitude, longitude, distance=30):
+        location = Point(float(longitude), float(latitude), srid=4326)
+        waterbodies = Waterbody.objects.filter(geom__distance_lte=(location, distance))
+        serializer = WaterBodySerializer(waterbodies, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
