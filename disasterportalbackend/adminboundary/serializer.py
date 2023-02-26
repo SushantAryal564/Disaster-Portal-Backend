@@ -3,7 +3,7 @@ from rest_framework import serializers
 from .models import *;
 class LalitpurMetroSerializer(GeoFeatureModelSerializer):
     class Meta:
-        model = LalitpurMetro
+        model = Lalitpurmetro
         geo_field = "geom"
         fields = '__all__'
 

@@ -1,43 +1,27 @@
-from django.contrib.gis.db import models       
+from django.contrib.gis.db import models  
+
+class Lalitpurmetro(models.Model):
+    gid = models.AutoField(primary_key=True) 
+    objectid = models.FloatField(blank=True, null=True)
+    shape_leng = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
+    shape_area = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
+    geom = models.GeometryField(blank=True, null=True)
+    palika = models.CharField(max_length=20, blank=True, null=True)
+
+    class Meta:
+        managed = False
+        db_table = 'LalitpurMetro'
 
 
 class Ward(models.Model):
-    province = models.BigIntegerField()        
-    district = models.CharField(max_length=50) 
-    palika = models.CharField(max_length=50)   
-    type = models.CharField(max_length=50)     
-    ward = models.BigIntegerField()
-    geom = models.PolygonField(srid=4326)
-    number_of_disasters = models.IntegerField(default=0)
-    total_infrastructure_damaged = models.IntegerField(default=0)
-    total_estimated_loss = models.IntegerField(default=0)
-    total_people_death = models.IntegerField(default=0)
-    def __str__(self):
-        return str(self.ward)
+    gid = models.AutoField(primary_key=True) 
+    ward = models.IntegerField(blank=True, null=True)
+    geom = models.GeometryField(blank=True, null=True)
+    number_of_disasters = models.IntegerField(blank=True, null=True)
+    total_infrastructure_damaged = models.IntegerField(blank=True, null=True)
+    total_estimated_loss = models.FloatField(blank=True, null=True)
+    total_people_death = models.IntegerField(blank=True, null=True)
 
-
-spatialdata_mapping = {
-    'province': 'PROVINCE',
-    'district': 'DISTRICT',
-    'palika': 'PALIKA',
-    'type': 'TYPE',
-    'ward': 'WARD',
-    'geom': 'POLYGON',
-}
-
-class LalitpurMetro(models.Model):
-    objectid = models.BigIntegerField()        
-    palika = models.CharField(max_length=50)   
-    shape_leng = models.FloatField()
-    shape_area = models.FloatField()
-    geom = models.PolygonField(srid=4326)  
-    def __str__(self):
-        return str(self.palika)
-# Auto-generated `LayerMapping` dictionary for LalitpurMetro model
-lalitpurmetro_mapping = {
-    'objectid': 'OBJECTID',
-    'palika': 'PALIKA',
-    'shape_leng': 'Shape_Leng',
-    'shape_area': 'Shape_Area',
-    'geom': 'POLYGON',
-}
+    class Meta:
+        managed = False
+        db_table = 'Ward'

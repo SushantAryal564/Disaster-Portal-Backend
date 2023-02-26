@@ -84,7 +84,7 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
     is_cluster = models.BooleanField(default=False)
     cluster_type = models.ForeignKey(ClusterType, on_delete=models.CASCADE, null=True, blank=True)
     ward = models.ForeignKey(Ward, on_delete=models.CASCADE, null=True, blank=True)
-    municipality = models.ForeignKey(LalitpurMetro, on_delete=models.CASCADE, null=True, blank=True)
+    municipality = models.ForeignKey(Lalitpurmetro, on_delete=models.CASCADE, null=True, blank=True)
     
     objects = CustomUserManager()
 

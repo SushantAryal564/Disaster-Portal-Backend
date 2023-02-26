@@ -2,11 +2,12 @@ from django.contrib.gis.db import models
 
 
 class Amenities(models.Model):
-    geom = models.PolygonField(blank=True, null=True)
+    gid = models.AutoField(primary_key=True)     
     osm_id = models.CharField(max_length=12, blank=True, null=True)
-    code = models.IntegerField(blank=True, null=True)
+    code = models.SmallIntegerField(blank=True, null=True)
     fclass = models.CharField(max_length=28, blank=True, null=True)
     name = models.CharField(max_length=100, blank=True, null=True)
+    geom = models.MultiPolygonField(blank=True, null=True)
 
     class Meta:
         managed = False
@@ -14,12 +15,13 @@ class Amenities(models.Model):
 
 
 class Buildings(models.Model):
-    geom = models.PolygonField(blank=True, null=True)
+    gid = models.AutoField(primary_key=True)     
     osm_id = models.CharField(max_length=12, blank=True, null=True)
-    code = models.IntegerField(blank=True, null=True)
+    code = models.SmallIntegerField(blank=True, null=True)
     fclass = models.CharField(max_length=28, blank=True, null=True)
     name = models.CharField(max_length=100, blank=True, null=True)
     type = models.CharField(max_length=20, blank=True, null=True)
+    geom = models.MultiPolygonField(blank=True, null=True)
 
     class Meta:
         managed = False
@@ -27,37 +29,45 @@ class Buildings(models.Model):
 
 
 class Forest(models.Model):
-    geom = models.PolygonField(blank=True, null=True)
+    gid = models.AutoField(primary_key=True)     
     osm_id = models.CharField(max_length=12, blank=True, null=True)
-    code = models.IntegerField(blank=True, null=True)
+    code = models.SmallIntegerField(blank=True, null=True)
     fclass = models.CharField(max_length=28, blank=True, null=True)
     name = models.CharField(max_length=100, blank=True, null=True)
+    geom = models.MultiPolygonField(blank=True, null=True)
 
     class Meta:
         managed = False
         db_table = 'Forest'
 
-class Waterbody(models.Model):
-    geom = models.PolygonField(blank=True, null=True)
+
+class Road(models.Model):
+    gid = models.AutoField(primary_key=True)     
     osm_id = models.CharField(max_length=12, blank=True, null=True)
-    code = models.IntegerField(blank=True, null=True)
+    code = models.SmallIntegerField(blank=True, null=True)
     fclass = models.CharField(max_length=28, blank=True, null=True)
     name = models.CharField(max_length=100, blank=True, null=True)
+    ref = models.CharField(max_length=20, blank=True, null=True)
+    oneway = models.CharField(max_length=1, blank=True, null=True)
+    maxspeed = models.SmallIntegerField(blank=True, null=True)
+    layer = models.FloatField(blank=True, null=True)
+    bridge = models.CharField(max_length=1, blank=True, null=True)
+    tunnel = models.CharField(max_length=1, blank=True, null=True)
+    geom = models.MultiLineStringField(blank=True, null=True)
+
+    class Meta:
+        managed = False
+        db_table = 'Road'
+
+
+class Waterbody(models.Model):
+    gid = models.AutoField(primary_key=True)     
+    osm_id = models.CharField(max_length=12, blank=True, null=True)
+    code = models.SmallIntegerField(blank=True, null=True)
+    fclass = models.CharField(max_length=28, blank=True, null=True)
+    name = models.CharField(max_length=100, blank=True, null=True)
+    geom = models.MultiPolygonField(blank=True, null=True)
 
     class Meta:
         managed = False
         db_table = 'Waterbody'
-
-class RoadLalitpur(models.Model):
-    geom = models.LineStringField(blank=True, null=True)
-    osm_id = models.CharField(max_length=12, blank=True, null=True)
-    code = models.IntegerField(blank=True, null=True)
-    fclass = models.CharField(max_length=28, blank=True, null=True)
-    name = models.CharField(max_length=100, blank=True, null=True)
-    ref = models.CharField(max_length=20, blank=True, null=True)
-    bridge = models.CharField(max_length=1, blank=True, null=True)    
-    tunnel = models.CharField(max_length=1, blank=True, null=True)
-
-    class Meta:        
-      managed = False
-      db_table = 'road_lalitpur'
