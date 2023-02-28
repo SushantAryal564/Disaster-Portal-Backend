@@ -28,6 +28,7 @@ class Buildings(models.Model):
     address = models.CharField(max_length=10, blank=True, null=True)
     housemetricnumber = models.CharField(max_length=50, blank=True, null=True)
     people = models.IntegerField(blank=True, null=True)
+    email = models.CharField(max_length=20, blank=True, null=True)
 
     class Meta:
         managed = False
