@@ -360,7 +360,7 @@ class MyPaginationClass(PageNumberPagination):
 class BuildingViewset(viewsets.ModelViewSet):
     queryset = Buildings.objects.all()
     serializer_class = BuildingsSerializer
-    pagination_class = MyPaginationClass
+    # pagination_class = MyPaginationClass
     def get_queryset(self):
       queryset = super().get_queryset()
       ward = self.request.query_params.get('ward', None)

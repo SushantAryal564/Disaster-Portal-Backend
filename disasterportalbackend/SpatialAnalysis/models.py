@@ -15,7 +15,7 @@ class Amenities(models.Model):
 
 
 class Buildings(models.Model):
-    gid = models.AutoField(primary_key=True)     
+    gid = models.AutoField(primary_key=True)
     osm_id = models.CharField(max_length=12, blank=True, null=True)
     code = models.SmallIntegerField(blank=True, null=True)
     fclass = models.CharField(max_length=28, blank=True, null=True)
@@ -23,6 +23,12 @@ class Buildings(models.Model):
     type = models.CharField(max_length=20, blank=True, null=True)
     geom = models.MultiPolygonField(blank=True, null=True)
     ward = models.IntegerField(blank=True, null=True)
+    phone_number_1 = models.CharField(max_length=10, blank=True, null=True)
+    phone_number_2 = models.CharField(max_length=10, blank=True, null=True)
+    address = models.CharField(max_length=10, blank=True, null=True)
+    housemetricnumber = models.CharField(max_length=50, blank=True, null=True)
+    people = models.IntegerField(blank=True, null=True)
+
     class Meta:
         managed = False
         db_table = 'Buildings'

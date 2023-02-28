@@ -1,39 +1,31 @@
-from rest_framework import serializers
+from rest_framework_gis.serializers import GeoFeatureModelSerializer
 from .models import *
-class PolygonField(serializers.Field):
-    def to_representation(self, value):
-        # Serialize a Polygon object as a dictionary with "type" and "coordinates" fields
-        return {
-            "type": "Polygon",
-            "coordinates": value.coords[0]
-        }
 
-    def to_internal_value(self, data):
-        # Deserialize a dictionary with "type" and "coordinates" fields as a Polygon object
-        return GEOSGeometry(json.dumps(data))
-      
-class AmenitiesSerializer(serializers.ModelSerializer):
-  class Meta:
-    model: Amenities
-    fields = '__all__'
+class AmenitiesSerializer(GeoFeatureModelSerializer):
+    class Meta:
+        model: Amenities
+        geo_field = 'geom'
+        fields = '__all__'
 
-class BuildingsSerializer(serializers.ModelSerializer):
+class BuildingsSerializer(GeoFeatureModelSerializer):
     class Meta:
         model = Buildings
+        geo_field = 'geom'
         fields = '__all__'
 
-class ForestSerializer(serializers.ModelSerializer):
+class ForestSerializer(GeoFeatureModelSerializer):
     class Meta:
         model = Forest
+        geo_field = 'geom'
         fields = '__all__'
 
-class WaterBodySerializer(serializers.ModelSerializer):
-  distance = serializers.FloatField()
-  class Meta:
-    model: Waterbody
-    fields = '__all__'
+class WaterBodySerializer(GeoFeatureModelSerializer):
+    class Meta:
+        model: Waterbody
+        geo_field = 'geom'
+        fields = '__all__'
 
-class RoadSerializer(serializers.ModelSerializer):
+class RoadSerializer(GeoFeatureModelSerializer):
     class Meta:
         model = Road
         fields = '__all__'
