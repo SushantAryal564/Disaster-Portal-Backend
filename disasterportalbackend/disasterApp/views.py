@@ -85,15 +85,16 @@ class DownloadCSV(APIView):
         events = DisasterEvent.objects.all()
         print(start_date, end_date,disaster_type)
         if start_date:
-          start_date = timezone.make_aware(datetime.strptime(start_date, '%Y-%m-%d'))
-          print(start_date,"((((((((((((((((()))))))))))))))))")
-          events = events.filter(date_event__gte=start_date,date_event__lte=end_date)
-          print("Second query:**************")
-          print(events)
+            start_date = timezone.make_aware(datetime.strptime(start_date, '%Y-%m-%d'))
+            events = events.filter(date_event__gte=start_date)
+
+        if end_date:
+            end_date = timezone.make_aware(datetime.strptime(end_date, '%Y-%m-%d'))
+            end_date += timezone.timedelta(days=1)  # include events on end_date
+            events = events.filter(date_event__lte=end_date)
+
         if disaster_type:
             events = events.filter(type__title=disaster_type)
-            print("Fourth query:**************")
-            print(events)
         # Write the CSV file
         writer = csv.writer(response)
         writer.writerow(['Name', 'Ward', 'Latitude', 'Longitude', 'Date of Event', 'Date Closed', 'Registered Date', 'Update Date', 'Is Verified', 'Is Closed', 'Disaster Type', 'Rating', 'Source', 'Description', 'Start Time', 'Expire Time', 'People Death', 'Estimated Loss', 'Infrastructure Destroyed'])
