@@ -24,7 +24,7 @@ class BufferPolygonIntersectionViewBuilding(APIView):
           p3857 = p4326.transform(ct, clone=True)
           
           query = """
-    SELECT * FROM "Buildings"
+    SELECT * FROM "buildings"
   WHERE ST_Intersects(
     geom,
     ST_Transform(
@@ -94,7 +94,7 @@ class BufferPolygonIntersectionViewForest(APIView):
         p3857 = p4326.transform(ct, clone=True)
         
         query = """
-  SELECT * FROM "Forest"
+  SELECT * FROM "forest"
 WHERE ST_Intersects(
   geom,
   ST_Transform(
@@ -165,7 +165,7 @@ class BufferPolygonIntersectionViewWaterBody(APIView):
         p3857 = p4326.transform(ct, clone=True)
         
         query = """
-  SELECT * FROM "Waterbody"
+  SELECT * FROM "waterbody"
 WHERE ST_Intersects(
   geom,
   ST_Transform(
@@ -236,7 +236,7 @@ class BufferPolygonIntersectionViewAmenities(APIView):
         p3857 = p4326.transform(ct, clone=True)
         
         query = """
-  SELECT * FROM "Amenities"
+  SELECT * FROM "amenities"
 WHERE ST_Intersects(
   geom,
   ST_Transform(

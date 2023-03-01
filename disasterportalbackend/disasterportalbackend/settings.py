@@ -45,9 +45,9 @@ INSTALLED_APPS = [
     'corsheaders',
     'accounts',
     'adminboundary',
-    'disasterApp',
+     'disasterApp',
     'Response',
-    'SpatialAnalysis',
+     'SpatialAnalysis',
 ]
 
 MIDDLEWARE = [
@@ -96,14 +96,13 @@ if os.name == 'nt':
 DATABASES = {
      'default': {
         "ENGINE": "django.contrib.gis.db.backends.postgis",
-        "NAME": 'DisasterPortal',
+        "NAME": 'newnew',
         "USER":'postgres',
-        "PASSWORD":'admin',
+        "PASSWORD":'cecil',
         "HOST":'localhost',
         "PORT":"5432"
     }
 }
-
 
 # Password validation
 # https://docs.djangoproject.com/en/4.1/ref/settings/#auth-password-validators
