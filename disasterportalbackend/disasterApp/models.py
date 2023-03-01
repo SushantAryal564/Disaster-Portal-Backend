@@ -29,7 +29,7 @@ class DisasterEvent(models.Model):
     Ward=models.ForeignKey(Ward,on_delete=models.PROTECT,blank=True,null=True)
     lat = models.FloatField(blank=True, null=True)
     long = models.FloatField(blank = True, null=True)
-    geom=models.GeometryField(blank=True,null=True)
+    geom=models.GeometryField(blank=True,null=True, srid=4326)
     date_event= models.DateTimeField(blank=True,default=timezone.now,null=True)
     date_closed=models.DateTimeField(blank=True,null=True)
     registered_date= models.DateTimeField(auto_now_add=True,blank=True, null=True)
