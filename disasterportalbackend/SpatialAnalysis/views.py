@@ -372,5 +372,18 @@ class AmenitiesViewset(viewsets.ModelViewSet):
     queryset = Amenities.objects.all()
     serializer_class = AmenitiesSerializer
 
+from django.contrib.gis.geos import Point
+from rest_framework.response import Response
+from rest_framework.views import APIView
+from adminboundary.models import Ward
 
-  
+class GetWardFromLatlng(APIView):
+    def get(self, request):
+        lat = float(request.GET.get('lat'))
+        lng = float(request.GET.get('lng'))
+        point = Point(lng, lat, srid=4326)
+        ward = Ward.objects.filter(geom__contains=point).first()
+        if ward:
+            return Response({"ward": ward.ward})
+        else:
+            return Response({"message": 'Locate the marker inside LMC'})
