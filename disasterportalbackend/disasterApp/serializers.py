@@ -19,7 +19,7 @@ class DisasterTypeSerializer(serializers.ModelSerializer):
 
 class DisasterEventSerializer(serializers.ModelSerializer):
   type = DisasterTypeSerializer()
-  
+  Ward = WardWithoutGeomSerializer()
   class Meta:
     model = DisasterEvent
     exclude = ['geom', 'is_verified','is_closed']

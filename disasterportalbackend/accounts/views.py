@@ -3,6 +3,7 @@ from rest_framework.response import Response
 from rest_framework_simplejwt.tokens import RefreshToken
 from rest_framework.views import APIView
 from .serializer import *
+
 class LoginAPI(APIView):
   def post(self, request):
     try:
@@ -17,8 +18,14 @@ class LoginAPI(APIView):
         usertype = ""
         refresh = RefreshToken.for_user(user)
         if(user.ward):
+          
           wardNumber = user.ward.ward
           usertype = "ward"
+          print('')
+          print('WARD-NUMBER',user.ward.gid),
+          print('')
+          print('WARD-ID',user.ward.ward)
+          print('USER',user)
           return Response({
           'refresh': str(refresh),
           'user':usertype,

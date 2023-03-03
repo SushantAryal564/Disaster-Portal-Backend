@@ -25,6 +25,9 @@ class Ward(models.Model):
     total_people_death = models.IntegerField(blank=True, null=True)
     centroid = models.GeometryField(srid=4326, blank=True, null=True)
 
+    def __str__(self):
+        return str(self.ward)
+
     class Meta:
         managed = False
         db_table = 'ward'

@@ -40,7 +40,7 @@ class DisasterEvent(models.Model):
     rating = models.ForeignKey(Rating,on_delete=models.PROTECT, null=True, blank=True)
     source = models.CharField(max_length=100, blank=True, null=True)
     description = models.TextField(blank=True, null=True)
-    startTime = models.DateTimeField(blank=True, null=True)
+    startTime = models.DateTimeField(blank=True, null=True,auto_now_add=True)
     expireTime = models.DateTimeField(blank=True, null=True)
     peopleDeath = models.IntegerField(blank=True, null=True)
     estimatedLoss = models.IntegerField(blank=True, null=True)

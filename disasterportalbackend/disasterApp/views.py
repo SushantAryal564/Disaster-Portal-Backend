@@ -32,12 +32,13 @@ class DisasterEventViewSet(viewsets.ModelViewSet):
   filter_backends=[filters.DjangoFilterBackend,rest_filters.SearchFilter,rest_filters.OrderingFilter]
   # filterset_class = DisasterTimeFilter
   # filterset_fields = ['name','Ward','type','is_closed','startTime','expireTime']
+  
   filterset_fields = {
     'name':['exact'],
     'Ward':['exact'],
     'type':['exact'],
     'is_closed':['exact'],
-    'startTime':['gte', 'gt', 'lt'],
+    'startTime':['gte', 'gt', 'lt',],
   }
   search_fields = ['name','Ward','type','is_closed','startTime','expireTime']
   
@@ -45,12 +46,15 @@ class DisasterEventViewSet(viewsets.ModelViewSet):
     source = "unknown"
     if self.request.user.is_authenticated:
       if(self.request.user.username):
-        source = self.request.user.username;
+        source = self.request.user.username
     lat = self.request.data['lat']
     lng = self.request.data['long']
     pntString = "POINT"+"("+lng+" "+lat+")"
     pnt = GEOSGeometry(pntString)
     serializer.save(is_verified=True,source=source,geom = pnt)
+
+
+
 
 class DisasterEventWithoutGeomViewSet(viewsets.ModelViewSet):
   queryset = DisasterEvent.objects.all()
@@ -59,15 +63,21 @@ class DisasterEventWithoutGeomViewSet(viewsets.ModelViewSet):
   serializer_class = DisasterEventWitoutWardGeomSerializer
   filter_backends=[filters.DjangoFilterBackend,rest_filters.SearchFilter,rest_filters.OrderingFilter]
   # filterset_class = DisasterTimeFilter
+  
   filterset_fields = {
     'name':['exact'],
     'Ward':['exact'],
     'type':['exact'],
     'is_closed':['exact'],
-    'startTime':['gte', 'gt','exact', 'lte'],
+    'date_event':['gte', 'gt','exact', 'lte'],
   }
-  search_fields = ['name','Ward','type','is_closed','startTime','expireTime']
+  search_fields = ['name','Ward','type','is_closed','date_event','expireTime']
   
+    
+
+
+
+
 import csv
 from django.http import HttpResponse
 from rest_framework.views import APIView
