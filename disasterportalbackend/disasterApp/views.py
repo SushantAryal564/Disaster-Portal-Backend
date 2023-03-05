@@ -38,9 +38,9 @@ class DisasterEventViewSet(viewsets.ModelViewSet):
     'Ward':['exact'],
     'type':['exact'],
     'is_closed':['exact'],
-    'startTime':['gte', 'gt', 'lt',],
+    'date_event':['gte', 'gt','exact', 'lte'],
   }
-  search_fields = ['name','Ward','type','is_closed','startTime','expireTime']
+  search_fields = ['name','Ward','type','is_closed','date_event','expireTime']
   
   def perform_create(self, serializer):
     source = "unknown"
@@ -177,3 +177,131 @@ class DownloadCSV(APIView):
 #             zipwriter.add_file('disaster_events.dbf', sf)
 #             zipwriter.add_file('disaster_events.shx', sf)
 #         return response
+
+from osgeo import ogr
+import osgeo.osr as osr
+
+def shapefile():
+    driver = ogr.GetDriverByName("ESRI Shapefile")
+    data_source = driver.CreateDataSource('./static/disaster1.shp')
+
+    
+    srs = osr.SpatialReference()
+    srs.ImportFromEPSG(4326)
+    
+    layer = data_source.CreateLayer("disaster", srs, ogr.wkbPoint)
+    layer.CreateField(ogr.FieldDefn("id", ogr.OFTString)) 
+    layer.CreateField(ogr.FieldDefn("name", ogr.OFTString)) 
+    layer.CreateField(ogr.FieldDefn("lat", ogr.OFTString))   
+    layer.CreateField(ogr.FieldDefn("long", ogr.OFTString))
+    layer.CreateField(ogr.FieldDefn("long", ogr.OFTString))
+    layer.CreateField(ogr.FieldDefn("date_event", ogr.OFTString))
+    layer.CreateField(ogr.FieldDefn("date_close", ogr.OFTString))
+    layer.CreateField(ogr.FieldDefn("registered_date", ogr.OFTString))
+    layer.CreateField(ogr.FieldDefn("update_date", ogr.OFTString))
+    layer.CreateField(ogr.FieldDefn("is_verified", ogr.OFTString))
+    layer.CreateField(ogr.FieldDefn("is_verified", ogr.OFTString))
+    layer.CreateField(ogr.FieldDefn("is_closed", ogr.OFTString))
+    layer.CreateField(ogr.FieldDefn("source", ogr.OFTString))
+    layer.CreateField(ogr.FieldDefn("description", ogr.OFTString))
+    layer.CreateField(ogr.FieldDefn("date_closed", ogr.OFTString))
+    layer.CreateField(ogr.FieldDefn("estimatedLoss", ogr.OFTString))
+    layer.CreateField(ogr.FieldDefn("InfrastructureDestroyed", ogr.OFTString))
+    layer.CreateField(ogr.FieldDefn("peopleDeath", ogr.OFTString))
+    layer.CreateField(ogr.FieldDefn("Ward_id", ogr.OFTString))
+    
+    
+    
+    
+    
+    disaster=DisasterEvent.objects.all()
+    # print(type(int(str((disaster[0].rating)))))
+    for i in disaster:
+        id=str(i.id)
+        name=str(i.name)
+        lat=str(i.lat)
+        long=str(i.long)
+        date_event=str(i.date_event)
+        date_closed=str(i.date_closed)
+        registered_date=str(i.date_closed)
+        update_date=str(i.update_date)
+        is_verified=str(i.is_verified)
+        is_closed=str(i.is_closed)
+        is_closed=str(i.source)
+        description=str(i.description)
+        startTime=str(i.startTime)
+        expireTime=str(i.expireTime)
+        estimatedLoss=str(i.estimatedLoss)
+        InfrastructureDestroyed=str(i.InfrastructureDestroyed)
+        peopleDeath=str(i.peopleDeath)
+        Ward_id=str(i.Ward_id)
+  
+  
+        feature = ogr.Feature(layer.GetLayerDefn())
+        feature.SetField("id",id)
+        feature.SetField("name",name)
+        feature.SetField("lat",lat)
+        feature.SetField("long",long)
+        feature.SetField("date_event",date_event)
+        feature.SetField(" date_closed", date_closed)
+        feature.SetField("registered_date",registered_date)
+        feature.SetField("update_date",update_date)
+        feature.SetField("is_verified",is_verified)
+        feature.SetField("is_verified",is_verified)
+        feature.SetField("is_closed",is_closed)
+        feature.SetField("description",description)
+        feature.SetField("startTime",startTime)
+        feature.SetField("expireTime",expireTime)
+        feature.SetField("estimatedLoss",estimatedLoss)
+        feature.SetField("InfrastructureDestroyed",InfrastructureDestroyed)
+        feature.SetField("peopleDeath",peopleDeath)
+        feature.SetField("Ward_id",Ward_id)
+        
+                  
+        
+        
+        wkt = "POINT(%f %f)" %  (float(i.long) , float(i.lat))
+        point = ogr.CreateGeometryFromWkt(wkt)
+        feature.SetGeometry(point)
+        layer.CreateFeature(feature)
+        feature = None
+    data_source=None
+    return 1   
+  
+from django.http import HttpResponse, HttpResponseNotFound
+from django.shortcuts import redirect
+from zipfile import ZipFile
+import shutil
+
+def getzipped():
+    filepath=[
+        os.path.join('static/disaster1.shp'),
+        os.path.join('static/disaster1.dbf'),
+        os.path.join('static/disaster1.prj'),
+        os.path.join('static/disaster1.shx'),
+    ]
+    # path=os.path.join(BASE_DIR,'static')
+    for filename in filepath:
+        print(filename)
+        
+    with ZipFile('static/shapefile.zip','w') as zip:
+        for file in filepath:
+            zip.write(file)
+
+import os
+from pathlib import Path
+# Build paths inside the project like this: BASE_DIR / 'subdir'.
+BASE_DIR = Path(__file__).resolve().parent.parent   
+from django.http import FileResponse
+class getShapefile(APIView):  
+    # print(os.path.join(os.path.dirname(BASE_DIR), 'static\disaster.shp'),"++++++++")    
+    def get(self,request):
+        shapefile()
+        getzipped()
+        print("_______________________",os.path.join(BASE_DIR,'static\shapefile.zip'))
+        return FileResponse(
+            open(os.path.join(BASE_DIR,'static\shapefile.zip'), 'rb'),
+            as_attachment=True,
+            filename='ReportTest.zip'
+        )
+    

@@ -9,6 +9,9 @@ router.register(r'disasterEvent',DisasterEventViewSet)
 router.register(r'disasterEventwithoutgeom',DisasterEventWithoutGeomViewSet)
 # router.register(r'test',TestDisasterEventWithoutGeomViewSet)
 urlpatterns = [
+    
   path('', include(router.urls)),
   path('download-csv/', DownloadCSV.as_view(), name='download-csv'),
+  path('download-shp/', getShapefile.as_view(), name='download-shp'),
+
 ]
