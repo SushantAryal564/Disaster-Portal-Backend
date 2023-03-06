@@ -183,13 +183,14 @@ import osgeo.osr as osr
 
 def shapefile():
     driver = ogr.GetDriverByName("ESRI Shapefile")
-    data_source = driver.CreateDataSource('./static/disaster1.shp')
+    data_source = driver.CreateDataSource('./disaster1.shp')
 
     
     srs = osr.SpatialReference()
     srs.ImportFromEPSG(4326)
     
     layer = data_source.CreateLayer("disaster", srs, ogr.wkbPoint)
+    
     layer.CreateField(ogr.FieldDefn("id", ogr.OFTString)) 
     layer.CreateField(ogr.FieldDefn("name", ogr.OFTString)) 
     layer.CreateField(ogr.FieldDefn("lat", ogr.OFTString))   
@@ -240,10 +241,12 @@ def shapefile():
         feature = ogr.Feature(layer.GetLayerDefn())
         feature.SetField("id",id)
         feature.SetField("name",name)
-        feature.SetField("lat",lat)
-        feature.SetField("long",long)
+        
+      #chnage this later lat long oppopsiite
+        feature.SetField("lat",long)
+        feature.SetField("long",lat)
         feature.SetField("date_event",date_event)
-        feature.SetField(" date_closed", date_closed)
+        feature.SetField("date_closed", date_closed)
         feature.SetField("registered_date",registered_date)
         feature.SetField("update_date",update_date)
         feature.SetField("is_verified",is_verified)
@@ -260,7 +263,7 @@ def shapefile():
                   
         
         
-        wkt = "POINT(%f %f)" %  (float(i.long) , float(i.lat))
+        wkt = "POINT(%f %f)" %  (float(i.lat) , float(i.long))
         point = ogr.CreateGeometryFromWkt(wkt)
         feature.SetGeometry(point)
         layer.CreateFeature(feature)
@@ -275,16 +278,16 @@ import shutil
 
 def getzipped():
     filepath=[
-        os.path.join('static/disaster1.shp'),
-        os.path.join('static/disaster1.dbf'),
-        os.path.join('static/disaster1.prj'),
-        os.path.join('static/disaster1.shx'),
+        os.path.join('./disaster1.shp'),
+        os.path.join('./disaster1.dbf'),
+        os.path.join('./disaster1.prj'),
+        os.path.join('./disaster1.shx'),
     ]
     # path=os.path.join(BASE_DIR,'static')
     for filename in filepath:
         print(filename)
         
-    with ZipFile('static/shapefile.zip','w') as zip:
+    with ZipFile('./shapefile.zip','w') as zip:
         for file in filepath:
             zip.write(file)
 
@@ -298,9 +301,9 @@ class getShapefile(APIView):
     def get(self,request):
         shapefile()
         getzipped()
-        print("_______________________",os.path.join(BASE_DIR,'static\shapefile.zip'))
+        print("_______________________",os.path.join(BASE_DIR,'.\shapefile.zip'))
         return FileResponse(
-            open(os.path.join(BASE_DIR,'static\shapefile.zip'), 'rb'),
+            open(os.path.join(BASE_DIR,'.\shapefile.zip'), 'rb'),
             as_attachment=True,
             filename='ReportTest.zip'
         )
