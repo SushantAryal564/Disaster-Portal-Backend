@@ -45,9 +45,9 @@ INSTALLED_APPS = [
     'corsheaders',
     'accounts',
     'adminboundary',
-     'disasterApp',
+    'disasterApp',
     'Response',
-     'SpatialAnalysis',
+    'SpatialAnalysis',
 ]
 
 MIDDLEWARE = [

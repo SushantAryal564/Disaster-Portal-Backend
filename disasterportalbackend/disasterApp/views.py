@@ -308,3 +308,30 @@ class getShapefile(APIView):
             filename='ReportTest.zip'
         )
     
+from django.http import JsonResponse
+from geoserver.catalog import Catalog
+
+
+from django.http import JsonResponse
+from geoserver.catalog import Catalog
+
+def geoserver_data(request):
+    # Connect to GeoServer
+    cat = Catalog("http://localhost:8080/geoserver/rest", "admin", "geoserver")
+
+    # Retrieve the layer
+    # layer = cat.get_layer("disasterportal:NepalLocalUnits0")
+   # Get the feature type from the layer
+    feature_type = cat.get_featuretype("disasterportal:NepalLocalUnits0")
+
+    # Get the feature source from the feature type
+    feature_source = feature_type.feature_source
+
+    # Get the features from the feature source
+    features = feature_source.features()
+
+    # Convert the features to GeoJSON
+    geojson = features.geojson
+
+    # Return the GeoJSON as a JSON response
+    return JsonResponse(geojson, safe=False)

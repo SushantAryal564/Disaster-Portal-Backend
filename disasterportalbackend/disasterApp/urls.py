@@ -13,5 +13,6 @@ urlpatterns = [
   path('', include(router.urls)),
   path('download-csv/', DownloadCSV.as_view(), name='download-csv'),
   path('download-shp/', getShapefile.as_view(), name='download-shp'),
+   path('geoserver-data/', geoserver_data, name='geoserver-data'),
 
 ]
