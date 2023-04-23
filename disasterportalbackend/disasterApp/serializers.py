@@ -19,10 +19,15 @@ class DisasterTypeSerializer(serializers.ModelSerializer):
 
 class DisasterEventSerializer(serializers.ModelSerializer):
   type = DisasterTypeSerializer()
-  
   class Meta:
     model = DisasterEvent
     exclude = ['geom', 'is_verified','is_closed']
+
+class DisasterEventSerializerTypeModified(serializers.ModelSerializer):
+  # type = DisasterTypeSerializer()
+  class Meta:
+    model = DisasterEvent
+    fields = '__all__'
 
 class DisasterEventWitoutWardGeomSerializer(serializers.ModelSerializer):
   type = DisasterTypeSerializer()

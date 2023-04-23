@@ -7,4 +7,5 @@ router.register(r'ward',WardWithGeomViewSet)
 urlpatterns = [
   path('', include(router.urls)),
   path('wards/<int:ward_number>/', WardDetail.as_view()),
+  path("getward/",GetWardFromLatlng.as_view()),
 ]
