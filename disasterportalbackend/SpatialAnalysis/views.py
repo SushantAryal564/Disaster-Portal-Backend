@@ -4,13 +4,15 @@ from django.contrib.gis.geos import Point
 from django.contrib.gis.geos import Polygon
 from django.contrib.gis.geos import fromstr
 from django.contrib.gis.geos import GEOSGeometry
-from .models import *
-import json
 from django.contrib.gis.geos import Point
 from django.contrib.gis.measure import Distance
 from django.contrib.gis.gdal import SpatialReference, CoordTransform
 from django.db import connection
 from rest_framework import viewsets
+from django_filters import rest_framework as filters
+from rest_framework  import filters as rest_filters
+from .models import *
+import json
 
 class BufferPolygonIntersectionViewBuilding(APIView):
   def get(self, request):
@@ -371,6 +373,11 @@ class BuildingViewset(viewsets.ModelViewSet):
 class AmenitiesViewset(viewsets.ModelViewSet):
     queryset = Amenities.objects.all()
     serializer_class = AmenitiesSerializer
-
+    def list(self, request, *args, **kwargs):
+        tag= request.GET.get('tag');
+        queryset= Amenities.objects.filter(fclass=tag)
+        serializer = AmenitiesSerializer(queryset, many=True)
+        return Response(serializer.data)
+    
 
   

@@ -35,3 +35,9 @@ class DisasterEventWitoutWardGeomSerializer(serializers.ModelSerializer):
   class Meta:
     model = DisasterEvent
     exclude = ['geom', 'is_verified','is_closed']
+
+class DisasterEventChartInformationSerializer(serializers.ModelSerializer):
+  type = DisasterTypeSerializer()
+  class Meta:
+    model = DisasterEvent
+    fields = ['startTime','Ward', 'peopleDeath','estimatedLoss','InfrastructureDestroyed','type','is_closed']

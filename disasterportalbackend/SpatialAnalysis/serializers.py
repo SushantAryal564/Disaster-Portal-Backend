@@ -3,9 +3,9 @@ from .models import *
 
 class AmenitiesSerializer(GeoFeatureModelSerializer):
     class Meta:
-        model: Amenities
-        geo_field = 'geom'
-        fields = '__all__'
+        model = Amenities
+        geo_field = 'centroid'
+        fields = ['centroid','fclass','name']
 
 class BuildingsSerializer(GeoFeatureModelSerializer):
     class Meta:

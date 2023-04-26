@@ -35,7 +35,7 @@ class DisasterEvent(models.Model):
     registered_date= models.DateTimeField(auto_now_add=True,blank=True, null=True)
     update_date = models.DateTimeField(auto_now=True , blank=True, null=True)
     is_verified = models.BooleanField(null=True, blank=True)
-    is_closed = models.BooleanField(null=True,blank=True)
+    is_closed = models.BooleanField(default=False)
     type = models.ForeignKey(DisasterType,on_delete=models.PROTECT, blank=True, null=True )
     rating = models.ForeignKey(Rating,on_delete=models.PROTECT, null=True, blank=True)
     source = models.CharField(max_length=100, blank=True, null=True)

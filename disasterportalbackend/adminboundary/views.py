@@ -11,6 +11,11 @@ from django.contrib.gis.geos import Point
 class LalitpurMetroViewSet(viewsets.ModelViewSet):
     queryset = Lalitpurmetro.objects.all()
     serializer_class = LalitpurMetroSerializer
+
+class ChartInformationViewSet(viewsets.ModelViewSet):
+    queryset = Ward.objects.all().order_by("-number_of_disasters");
+    serializer_class = ChartSerializer
+    
 class WardWithGeomViewSet(viewsets.ModelViewSet):
     queryset = Ward.objects.all()
     serializer_class = WardSerializer
@@ -49,3 +54,4 @@ class GetWardFromLatlng(APIView):
             return Response({"ward": ward.ward})
         else:
             return Response({"message": 'Locate the marker inside LMC'})
+

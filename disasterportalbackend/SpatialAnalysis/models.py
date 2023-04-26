@@ -2,12 +2,13 @@ from django.contrib.gis.db import models
 
 
 class Amenities(models.Model):
-    gid = models.AutoField(primary_key=True)     
+    gid = models.AutoField(primary_key=True)
     osm_id = models.CharField(max_length=12, blank=True, null=True)
     code = models.SmallIntegerField(blank=True, null=True)
     fclass = models.CharField(max_length=28, blank=True, null=True)
     name = models.CharField(max_length=100, blank=True, null=True)
     geom = models.MultiPolygonField(blank=True, null=True)
+    centroid = models.PointField(blank=True, null=True)
 
     class Meta:
         managed = False
