@@ -35,23 +35,17 @@ class DisasterEvent(models.Model):
     registered_date= models.DateTimeField(auto_now_add=True,blank=True, null=True)
     update_date = models.DateTimeField(auto_now=True , blank=True, null=True)
     is_verified = models.BooleanField(null=True, blank=True)
-    is_closed = models.BooleanField(null=True,blank=True)
+    is_closed = models.BooleanField(default=False)
     type = models.ForeignKey(DisasterType,on_delete=models.PROTECT, blank=True, null=True )
     rating = models.ForeignKey(Rating,on_delete=models.PROTECT, null=True, blank=True)
     source = models.CharField(max_length=100, blank=True, null=True)
     description = models.TextField(blank=True, null=True)
-    startTime = models.DateTimeField(blank=True, null=True)
+    startTime = models.DateTimeField(blank=True, null=True, default=timezone.now)
     expireTime = models.DateTimeField(blank=True, null=True)
-    peopleDeath = models.IntegerField(blank=True, null=True)
-    estimatedLoss = models.IntegerField(blank=True, null=True)
-    InfrastructureDestroyed = models.IntegerField(blank=True, null=True)
-    peopleDeath = models.IntegerField(blank=True, null=True)
+    peopleDeath = models.IntegerField(blank=True, null=True, default=0)
+    estimatedLoss = models.IntegerField(blank=True, null=True, default=0)
+    InfrastructureDestroyed = models.IntegerField(blank=True, null=True, default=0)
     objects=GeoManager()
-    def save(self, *args, **kwargs):
-        self.Ward.number_of_disasters += 1
-        self.Ward.save()
-        super().save(*args, **kwargs)
-        
     def __str__(self):
         return str(super().__str__())+str(self.name)
 
@@ -66,6 +60,13 @@ def update_ward_disater_damge_loss(sender, instance, **kwargs):
     instance.Ward.total_estimated_loss += instance.estimatedLoss
     instance.Ward.total_people_death += instance.peopleDeath
     instance.Ward.save()
+
+@receiver(post_save, sender=DisasterEvent)
+def update_ward_number_of_disasters(sender, instance, created, **kwargs):
+    if created:
+        ward = instance.Ward
+        ward.number_of_disasters += 1
+        ward.save()
 
 @receiver(post_delete, sender=DisasterEvent)
 def subtract_ward_disater_damge_loss(sender, instance, **kwargs):

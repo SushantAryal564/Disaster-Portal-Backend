@@ -5,7 +5,7 @@ from rest_framework import routers
 from SpatialAnalysis.views import *
 router = routers.DefaultRouter()
 router.register(r'allbuilding', BuildingViewset)
-
+router.register(r'amenites',AmenitiesViewset)
 urlpatterns = [
     path('', include(router.urls)),
     path("building/", BufferPolygonIntersectionViewBuilding.as_view()),

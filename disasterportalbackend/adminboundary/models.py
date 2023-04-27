@@ -18,9 +18,9 @@ class Ward(models.Model):
     ward = models.IntegerField(blank=True, null=True)
     geom = models.GeometryField(blank=True, null=True, srid=4326)
     number_of_disasters = models.IntegerField(blank=True, null=True)
-    total_infrastructure_damaged = models.IntegerField(blank=True, null=True)
-    total_estimated_loss = models.FloatField(blank=True, null=True)
-    total_people_death = models.IntegerField(blank=True, null=True)
+    total_infrastructure_damaged = models.IntegerField(blank=True, null=True, default=0)
+    total_estimated_loss = models.FloatField(blank=True, null=True, default=0)
+    total_people_death = models.IntegerField(blank=True, null=True, default=0)
     centroid = models.GeometryField(srid=4326, blank=True, null=True)   
     class Meta:
         managed = False
