@@ -295,6 +295,66 @@ WHERE ST_Intersects(
         }
         return Response(feature_collection)
 
+
+#trigger alertAPI view
+class BufferPolygonIntersectionViewBuildingTriggerAlert(APIView):
+  def get(self, request):
+      pass
+  #         lat = float(request.POST.get('lat',None))
+  #         disaster_id = float(request.POST.get('lat',None))
+  #         message = (request.POST.get('message',None))
+  #         lng = float(request.POST.get('lon',None))
+  #         buffer_distance = float(request.POST.get('buffer_distance'))/100000
+  #         p4326=Point(lng, lat, srid=4326)
+  #         print('lat long sent',lng,lat)
+  #         print('lat long got',p4326)
+  #         ct = CoordTransform(SpatialReference(4326), SpatialReference(3857))
+  #         p3857 = p4326.transform(ct, clone=True)
+          
+  #         query = """
+  #   SELECT * FROM "Buildings"
+  # WHERE ST_Intersects(
+  #   geom,
+  #   ST_Transform(
+  #     ST_MakeEnvelope(85.28460208092133, 27.606122394532917, 85.35535620512481, 27.69326664414035, 4326),
+  #     4326
+  #   )
+  # )  AND
+  #   ST_DWithin(
+  #     ST_Transform(
+  #       ST_SetSRID(
+  #         ST_Point(%s, %s),
+  #         4326
+  #       ),
+  #       4326
+  #     ),
+  #     ST_Transform(geom, 4326),
+  #     %s
+  #   );
+  # """
+  #         with connection.cursor() as cursor:
+  #             cursor.execute("EXPLAIN ANALYZE " + query, [p4326.x, p4326.y,buffer_distance])
+  #             explain_result = cursor.fetchall()
+  #             print("Query plan:")
+  #             for plan in explain_result:
+  #                 print(plan)
+  #             cursor.execute(query , [p4326.x, p4326.y,buffer_distance])
+  #             rows = cursor.fetchall()
+  #         features = [] 
+  #         emails=[]
+          # testemails=['cecilghimire@gmail.com','cecilghimire0@gmail.com']
+          # for row in rows:
+          #     emails.append(row[-1])            
+        
+          # from django.core.mail import send_mail
+          # subject = 'LMC Disaster Alert'
+          # message = 'Message you want to send'
+          # email_from = 'lalipurmetro30@gmail.com'
+          # recipient_list = testemails
+          # send_mail(subject, message, email_from, recipient_list)        
+          # return Response(testemails)
+
+
 from django.contrib.gis.geos import Point
 from django.contrib.gis.db.models.functions import Distance
 from rest_framework.views import APIView
@@ -363,12 +423,46 @@ class BuildingViewset(viewsets.ModelViewSet):
     queryset = Buildings.objects.all()
     serializer_class = BuildingsSerializer
     # pagination_class = MyPaginationClass
+
     def get_queryset(self):
       queryset = super().get_queryset()
       ward = self.request.query_params.get('ward', None)
       if ward is not None:
           queryset = queryset.filter(ward=ward)
       return queryset
+    def retrieve(self, request, *args, **kwargs):
+        return super().retrieve(request, *args, **kwargs)
+
+
+
+
+from rest_framework.decorators import api_view
+from rest_framework.response import Response
+
+@api_view(['PATCH'])
+def building_partial_update(request):
+    osm_id = request.data.get('osm_id')
+    qs = Buildings.objects.filter(osm_id=osm_id).first()
+    if qs is None:
+        return Response({"error": f"No Buildings object found for osm_id {osm_id}"}, status=400)
+    ser = BuildingsSerializer(data=request.data, instance=qs, partial=True)
+    if ser.is_valid():
+        ser.save()
+        return Response({"message": "Data updated successfully", "data": ser.data}, status=200)
+    return Response({"error": ser.errors}, status=400)
+    
+class SingleBuildingViewset(APIView):
+
+    queryset = Buildings.objects.all()
+    serializer_class = BuildingsSerializer
+    def get(self, request, *args, **kwargs):
+        id=request.GET.get('id')
+        if id is None:
+            return Response(data={"msg":"no id"},status=400)
+        queryset = Buildings.objects.filter(osm_id=id)[0]
+        serialz=BuildingsSerializer(queryset)
+        return Response(serialz.data)
+        
 
 class AmenitiesViewset(viewsets.ModelViewSet):
     queryset = Amenities.objects.all()
