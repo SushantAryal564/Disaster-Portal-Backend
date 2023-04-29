@@ -37,6 +37,7 @@ class DisasterEvent(models.Model):
     is_verified = models.BooleanField(null=True, blank=True)
     is_closed = models.BooleanField(default=False)
     type = models.ForeignKey(DisasterType,on_delete=models.PROTECT, blank=True, null=True )
+    address = models.CharField(null=True, blank=True, max_length=100);
     rating = models.ForeignKey(Rating,on_delete=models.PROTECT, null=True, blank=True)
     source = models.CharField(max_length=100, blank=True, null=True)
     description = models.TextField(blank=True, null=True)
