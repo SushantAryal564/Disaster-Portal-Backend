@@ -21,5 +21,5 @@ urlpatterns = [
     path('email/',BufferPolygonIntersectionViewBuildingTriggerAlert.as_view(),name='alert-email'),
     path('patchbuilding/', building_partial_update,name='patch building'),
     path('download_building/',download_building_event),
-      path('download_dsiaster/',download_disaster_event)
+      path('download_disaster/',download_disaster_event)
 ]

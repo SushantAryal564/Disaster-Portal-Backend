@@ -123,7 +123,6 @@ def update_disaster_event(request, pk):
 
 
 
-
 import csv
 from django.http import HttpResponse
 from rest_framework.views import APIView
@@ -154,3 +153,8 @@ class DownloadCSV(APIView):
             writer.writerow([event.name, event.Ward.ward, event.lat, event.long, event.date_event, event.date_closed, event.registered_date, event.update_date, event.is_verified, event.is_closed, event.type, event.rating, event.source, event.description, event.startTime, event.expireTime, event.peopleDeath, event.estimatedLoss, event.InfrastructureDestroyed])
 
         return response
+    
+
+@api_view(['GET'])
+def download_disaster_event(request, pk):
+   pass

@@ -28,7 +28,7 @@ DEBUG = True
 ALLOWED_HOSTS = []
 
 
-# Application definition
+
 
 INSTALLED_APPS = [
     'django.contrib.admin',
@@ -96,9 +96,9 @@ if os.name == 'nt':
 DATABASES = {
      'default': {
         "ENGINE": "django.contrib.gis.db.backends.postgis",
-        "NAME": 'DisasterPortal',
-        "USER":'postgres',
-        "PASSWORD":'admin',
+        "NAME": 'disaster3',
+        "USER":'cecil3',
+        "PASSWORD":'cecil3',
         "HOST":'localhost',
         "PORT":"5432"
     }
