@@ -43,14 +43,16 @@ class DisasterEventViewSet(viewsets.ModelViewSet):
   
   def perform_create(self, serializer):
     source = "unknown"
+    is_verified=False
     if self.request.user.is_authenticated:
       if(self.request.user.username):
         source = self.request.user.username;
+        is_verified=True
     lat = self.request.data['lat']
     lng = self.request.data['long']
     pntString = "POINT"+"("+lng+" "+lat+")"
     pnt = GEOSGeometry(pntString)
-    serializer.save(is_verified=True,source=source,geom = pnt)
+    serializer.save(is_verified=is_verified,source=source,geom = pnt)
 
 class DisasterEventWithoutGeomViewSet(viewsets.ModelViewSet):
   queryset = DisasterEvent.objects.all()
@@ -76,7 +78,7 @@ class DisasterEventTypeModifiedViewSet(viewsets.ModelViewSet):
   serializer_class = DisasterEventSerializerTypeModified
   filter_backends=[filters.DjangoFilterBackend,rest_filters.SearchFilter,rest_filters.OrderingFilter]
   
-  
+
   def perform_create(self, serializer):
     source = "unknown"
     if self.request.user.is_authenticated:
@@ -98,6 +100,28 @@ class DisasterEventChartInformationViewSet(viewsets.ModelViewSet):
     'startTime':['gte','lte'],
   }
   search_fields = ['Ward','is_closed','startTime','is_closed']
+
+from rest_framework.decorators import api_view
+from rest_framework.response import Response
+from rest_framework import status
+from .serializers import DisasterEventSerializerTypeModified
+from .models import DisasterEvent
+
+
+
+@api_view(['PATCH'])
+def update_disaster_event(request, pk):
+    try:
+        event = DisasterEvent.objects.get(pk=pk)
+    except DisasterEvent.DoesNotExist:
+        return Response({'error': 'Disaster event not found.'}, status=status.HTTP_404_NOT_FOUND)
+    serializer = DisasterEventSerializerTypeModified(event, data=request.data, partial=True)
+    if serializer.is_valid():
+        serializer.save()
+        return Response(serializer.data)
+    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
 
 
 import csv

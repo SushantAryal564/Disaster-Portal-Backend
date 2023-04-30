@@ -12,9 +12,9 @@ class DisasterEventPermission(permissions.BasePermission):
         return True
       if(request.user.is_superuser):
         return True
-      elif (request.user.is_Municipality):
-        return True
       elif (request.user.ward == obj.disaster.Ward):
+        return True
+      elif (request.user.is_Municipality):
         return True
 
 class OnlyGet(permissions.BasePermission):
