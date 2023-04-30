@@ -531,7 +531,7 @@ def download_building_event(request):
     gdf = gpd.read_postgis(sql, conn)
 
     # Close the database connection
-    conn.close()
+   
 
     # Create the directory for the output file if it does not exist
     os.makedirs(dir, exist_ok=True)
@@ -562,7 +562,7 @@ def download_disaster_event(request):
     todate = request.query_params.get('todate')
 
     # Construct the SQL query to select all columns from the "disasterApp_disasterevent" table where date_event is within the date range
-    sql = f"""SELECT * FROM "disasterApp_disasterevent" WHERE date_event BETWEEN '{fromdate}' AND '{todate}'"""
+    sql = f"""SELECT id,geom,lat,long FROM "disasterApp_disasterevent" WHERE date_event BETWEEN '{fromdate}' AND '{todate}'"""
 
     # Set the directory to create a new folder called devent with date range in the name
     dir = f'media/analysis_download/devent_{fromdate}_to_{todate}/'
@@ -574,15 +574,17 @@ def download_disaster_event(request):
     gdf = gpd.read_postgis(sql, conn)
 
     # Close the database connection
-    conn.close()
+ 
 
     # Create the directory for the output file if it does not exist
     os.makedirs(dir, exist_ok=True)
 
     # Save the geopandas dataframe as a shapefile
     filename = f"devent_{fromdate}_to_{todate}.shp" 
-    gdf.to_file(os.path.join(dir, filename), driver='ESRI Shapefile')
-
+    # gdf = gdf.drop(columns=['attributes'])
+    gdf.to_file(os.path.join(dir, filename),
+              driver='ESRI Shapefile')
+    
     # Create the zipfile for the output directory
     shutil.make_archive(base_name=root_dir+f'devent_{fromdate}_to_{todate}', format='zip', root_dir=root_dir, base_dir=f'devent_{fromdate}_to_{todate}')
 
