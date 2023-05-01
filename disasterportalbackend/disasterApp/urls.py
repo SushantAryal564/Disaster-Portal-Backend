@@ -13,5 +13,6 @@ urlpatterns = [
 path('download-csv/', DownloadCSV.as_view(), name='download-csv'),
 # path('download-shapefile/', DownloadShapefile, name='download_shapefile'),
 path('', include(router.urls)),
-path('updatedisaster/<int:pk>/',update_disaster_event)
+path('updatedisaster/<int:pk>/',update_disaster_event),
+path('deletedisaster/<int:pk>/',delete_disaster_event)
 ]

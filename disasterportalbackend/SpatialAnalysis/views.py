@@ -482,5 +482,103 @@ class AmenitiesViewset(viewsets.ModelViewSet):
         serializer = AmenitiesSerializer(queryset, many=True)
         return Response(serializer.data)
     
+import geopandas as gpd
+import psycopg2,os,shutil
 
-  
+# Establish a connection to the PostgreSQL database
+conn = psycopg2.connect(
+    host="localhost",
+    database="disaster3",
+    user="cecil3",
+    password="cecil3"
+)
+
+from django.http import Http404, HttpResponse
+@api_view(['GET'])
+def download_building_event(request):
+    ward = request.query_params.get('ward', None)
+    dir = f'media/analysis_download/{ward}/'
+    root_dir = f'media/analysis_download/'
+    os.makedirs(dir, exist_ok=True)
+
+    # # Establish a connection to the PostgreSQL database
+    # conn = psycopg2.connect(
+    #     host="localhost",
+    #     database="mydatabase",
+    #     user="myusername",
+    #     password="mypassword"
+    # )
+
+    # Define the SQL query to select the data you want to read
+    sql = f"""SELECT name,fclass,gid,geom FROM "Buildings" WHERE ward={ward} LIMIT 100"""
+
+    # Use geopandas to read the data from the PostgreSQL database 
+    gdf = gpd.read_postgis(sql, conn)
+
+    # Close the database connection
+   
+
+    # Create the directory for the output file if it does not exist
+    os.makedirs(dir, exist_ok=True)
+
+    # Save the geopandas dataframe as a shapefile
+    filename = "buildings.shp" 
+    gdf.to_file(os.path.join(dir, filename), driver='ESRI Shapefile')
+
+    # Create the zipfile for the output directory
+    shutil.make_archive(base_name=root_dir+ward, format='zip', root_dir=root_dir, base_dir=ward)
+
+    # Open the saved zipfile and read the contents into a response object
+    with open(root_dir+ward+'.zip', 'rb') as f:
+        response = HttpResponse(f.read(), content_type='application/force-download')
+        response['Content-Disposition'] = f'attachment; filename="{ward}.zip"'
+
+    # Remove the output directory
+    shutil.rmtree(dir)
+
+    # Return the response object
+    return response
+
+@api_view(['GET'])
+
+def download_disaster_event(request):
+    # Get the fromdate and todate from the query parameters
+    fromdate = request.query_params.get('fromdate')
+    todate = request.query_params.get('todate')
+
+    # Construct the SQL query to select all columns from the "disasterApp_disasterevent" table where date_event is within the date range
+    sql = f"""SELECT id,geom,lat,long FROM "disasterApp_disasterevent" WHERE date_event BETWEEN '{fromdate}' AND '{todate}'"""
+
+    # Set the directory to create a new folder called devent with date range in the name
+    dir = f'media/analysis_download/devent_{fromdate}_to_{todate}/'
+    root_dir = 'media/analysis_download/'
+    os.makedirs(dir, exist_ok=True)
+
+    # Use geopandas to read the data from the PostgreSQL database 
+    gdf = gpd.read_postgis(sql, conn)
+
+    # Close the database connection
+ 
+
+    # Create the directory for the output file if it does not exist
+    os.makedirs(dir, exist_ok=True)
+
+    # Save the geopandas dataframe as a shapefile
+    filename = f"devent_{fromdate}_to_{todate}.shp" 
+    # gdf = gdf.drop(columns=['attributes'])
+    gdf.to_file(os.path.join(dir, filename),
+              driver='ESRI Shapefile')
+    
+    # Create the zipfile for the output directory
+    shutil.make_archive(base_name=root_dir+f'devent_{fromdate}_to_{todate}', format='zip', root_dir=root_dir, base_dir=f'devent_{fromdate}_to_{todate}')
+
+    # Open the saved zipfile and read the contents into a response object
+    with open(root_dir+f'devent_{fromdate}_to_{todate}.zip', 'rb') as f:
+        response = HttpResponse(f.read(), content_type='application/force-download')
+        response['Content-Disposition'] = f'attachment; filename="devent_{fromdate}_to_{todate}.zip"'
+
+    # Remove the output directory
+    shutil.rmtree(dir)
+
+    # Return the response object
+    return response
