@@ -19,8 +19,12 @@ class ActivityLogViewSet(viewsets.ModelViewSet):
     }
     search_fields = ['disaster__is_closed', 'disaster__id']
     def perform_create(self, serializer):
-     if self.request.user.is_authenticated:
-        serializer.save(logCreator=self.request.user)
+        print(self.request.user)
+        print(self.request.user.is_authenticated)
+        if self.request.user.is_authenticated:
+            serializer.save(logCreator=self.request.user)
+        else:
+            serializer.save();
     
 class VoluntersViewSet(viewsets.ModelViewSet):
     queryset = Volunters.objects.all()

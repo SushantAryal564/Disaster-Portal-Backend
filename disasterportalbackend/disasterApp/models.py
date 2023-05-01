@@ -20,7 +20,6 @@ class Rating(models.Model):
 class ClusterType(models.Model):
     name = models.CharField(max_length=100)
     cluster_lead = models.CharField(max_length=100)
-    cluster_lead = models.CharField(max_length=100)
     def __str__(self):
         return str(self.name)
 

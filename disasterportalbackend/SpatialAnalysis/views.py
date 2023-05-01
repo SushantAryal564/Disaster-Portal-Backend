@@ -300,15 +300,12 @@ WHERE ST_Intersects(
 from disasterApp.models import DisasterEvent
 class BufferPolygonIntersectionViewBuildingTriggerAlert(APIView):
   def post(self, request):
-      # pass
           lat = float(request.data['lat'])
-          print("---------------------------------------------------",request.data['lat'])
-          disaster_id = int(request.data['lat'])
+          print("---------------------------------------------------",request.data['disaster_id'])
+          disaster_id = int(request.data['disaster_id'])
           
           message = request.data['message']
-          
           ob=DisasterEvent.objects.get(id=disaster_id)
-          
           name=ob.name
           des=ob.description
           message=message+"/n"+name+des
@@ -352,30 +349,18 @@ class BufferPolygonIntersectionViewBuildingTriggerAlert(APIView):
               rows = cursor.fetchall()
           features = [] 
           emails=[]
-          print(
-              'hjgggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggg',emails
-          )
-          # testemails=['cecilghimire@gmail.com','cecilghimire0@gmail.com']
           for row in rows:
-              # print(row,"ROW")
               if row[11]:
-                emails.append(row[11])  
-          print(
-              'hjgggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggg',emails
-          )          
+                emails.append(row[11])            
           import smtplib
           subject = 'LMC Disaster Alert'
           server = smtplib.SMTP('smtp.gmail.com', 587) 
-          # message = 'Message you want to send'
           email_from = 'lalitpurmetro30@gmail.com'
           server.ehlo()
           server.starttls()
           for i in emails:
-
             server.login(email_from, "doomelyvemmsxteg")
-            server.sendmail(email_from, i, message)  
-                      # recipient_list = testemails
-          # send_mail(subject, message, email_from, recipient_list)        
+            server.sendmail(email_from, i, message)       
           return Response(emails)
 
 

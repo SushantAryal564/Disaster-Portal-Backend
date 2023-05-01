@@ -16,6 +16,7 @@ class LoginAPI(APIView):
           return Response({'message':'invalid password'})
         usertype = ""
         refresh = RefreshToken.for_user(user)
+        print(user.cluster_type,"(((((((((((((((())))))))))))))))");
         if(user.ward):
           wardNumber = user.ward.ward
           usertype = "ward"
@@ -33,6 +34,15 @@ class LoginAPI(APIView):
           'user':usertype,
           'access': str(refresh.access_token),
         })
+        if(user.cluster_type):
+          userType="cluster"
+          clusterName = user.cluster_type.name;
+          return Response({
+          'refresh': str(refresh),
+          'user':userType,
+          'clusterName':clusterName,
+          'access': str(refresh.access_token),
+          })
 
     except Exception as e:
       print(e)
