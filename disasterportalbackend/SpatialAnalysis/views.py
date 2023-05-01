@@ -569,7 +569,6 @@ def download_disaster_event(request):
     root_dir = 'media/analysis_download/'
     os.makedirs(dir, exist_ok=True)
 
-
     # Use geopandas to read the data from the PostgreSQL database 
     gdf = gpd.read_postgis(sql, conn)
 

@@ -121,7 +121,14 @@ def update_disaster_event(request, pk):
         return Response(serializer.data)
     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-
+@api_view(['DELETE'])
+def delete_disaster_event(request, pk):
+    try:
+        event = DisasterEvent.objects.get(pk=pk)
+    except DisasterEvent.DoesNotExist:
+        return Response({'error': 'Disaster event not found.'}, status=status.HTTP_404_NOT_FOUND)
+    event.delete()
+    return Response({'message': 'Disaster event deleted successfully.'}, status=status.HTTP_204_NO_CONTENT)
 
 import csv
 from django.http import HttpResponse
@@ -155,6 +162,3 @@ class DownloadCSV(APIView):
         return response
     
 
-@api_view(['GET'])
-def download_disaster_event(request, pk):
-   pass
